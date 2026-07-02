@@ -1,0 +1,49 @@
+body { 
+    font-family: 'Inter', sans-serif; 
+    background-color: #030303;
+}
+
+.font-mono { font-family: 'Fira Code', monospace; }
+
+/* Enhanced Cyber Grid Background */
+.cyber-grid {
+    background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center top;
+}
+
+/* Premium Glass Panels */
+.glass-panel {
+    background: rgba(10, 10, 10, 0.65);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Card Hover Interactions */
+.member-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.member-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.8);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #030303;
+    border-left: 1px solid #111;
+}
+::-webkit-scrollbar-thumb {
+    background: #222;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #3a66d4;
+}

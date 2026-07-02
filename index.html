@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUB_Dragons | Competitive Programming Team</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script>
+    (function() {
+        var password = "206969";
+        var entered = prompt("Enter team password to access GUB_Dragons:");
+        if (entered !== password) {
+            document.documentElement.innerHTML = "<h1>Access Denied</h1>";
+            window.stop();
+        }
+    })();
+</script>
+</head>
+<body class="bg-darkBg text-gray-300 min-h-screen cyber-grid relative overflow-x-hidden selection:bg-cobaltLight selection:text-white">
+
+    <div class="fixed top-[-10%] left-[50%] -translate-x-1/2 w-[1000px] h-[1000px] bg-blue-900/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+    <header class="relative z-10 max-w-[95rem] mx-auto px-6 lg:px-12 pt-28 pb-20 flex flex-col items-center text-center">
+        <div class="relative mb-10 sm:mb-12 w-56 h-56 sm:w-72 sm:h-72 rounded-full overflow-hidden border-[4px] border-gray-800 shadow-[0_0_60px_rgba(58,102,212,0.3)] bg-white flex items-center justify-center group transition-all duration-500 hover:border-cobaltLight">
+            <img src="logo.png" alt="GUB Dragons Logo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+        </div>
+        
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-9xl font-black text-white mb-6 tracking-tighter drop-shadow-2xl uppercase">
+            GUB_<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cobaltLight">Dragons</span>
+        </h1>
+        <div class="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gray-900 border border-gray-700 rounded-full font-mono text-cobaltLight uppercase tracking-widest text-[11px] sm:text-sm shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <i class="fa-solid fa-terminal"></i> Official Team Portal
+        </div>
+
+    </header>
+
+
+    <main class="relative z-10 max-w-[95rem] mx-auto px-6 lg:px-12 pb-32 space-y-24 overflow-x-hidden">
+
+        
+        <section class="glass-panel p-6 sm:p-8 lg:p-16 rounded-[3rem] shadow-2xl">
+            <div class="flex items-center gap-5 mb-10 sm:mb-12 border-b border-gray-800 pb-6 sm:pb-8">
+                <i class="fa-solid fa-users-viewfinder text-3xl sm:text-4xl text-cobaltLight"></i>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight">The Vanguard</h2>
+            </div>
+            
+            <div class="mb-12 sm:mb-16 space-y-6 max-w-6xl">
+
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed font-medium">
+                    We are <strong class="text-white">GUB_Dragons</strong>, a premier competitive programming trio from the Department of Computer Science and Engineering at Green University of Bangladesh. 
+                </p>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed font-medium">
+                    This engine strictly tracks our longitudinal contest trajectories, charting every algorithmic victory and defeat starting exactly from <strong class="text-white">September 1, 2025</strong>.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                
+                <div class="member-card bg-gray-900/80 p-8 rounded-[2rem] border border-gray-800 relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-red-900/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between mb-8 relative z-10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-4 h-12 bg-red-500 rounded-sm shadow-[0_0_15px_rgba(239,68,68,0.6)]"></div>
+                            <div>
+                                <h4 class="text-2xl text-white font-black">Tanmoy Mitra</h4>
+                                <p class="text-sm text-gray-500 font-mono mt-1"><i class="fa-solid fa-id-card"></i> ID: 252002055</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 relative z-10 bg-black/50 p-5 rounded-2xl border border-gray-800/50">
+                        <div class="border-r border-gray-800 pr-4">
+                            <h5 class="text-cobaltLight font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-chart-simple"></i> CF</h5>
+                            <div class="mb-4">
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Live Current</p>
+                                <p class="text-xl font-black text-white" id="cf-cur-rating-mitratanmoy246">---</p>
+                                <p class="text-xs text-gray-400 capitalize truncate" id="cf-cur-tier-mitratanmoy246">Syncing...</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Maximum</p>
+                                <p class="text-xl font-black text-gray-300" id="cf-max-rating-mitratanmoy246">---</p>
+                                <p class="text-xs text-gray-500 capitalize truncate" id="cf-max-tier-mitratanmoy246">Syncing...</p>
+                            </div>
+                        </div>
+                        <div class="pl-2">
+                            <h5 class="text-amber-500 font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-fire"></i> CC</h5>
+                            <div class="mb-4">
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Live Current</p>
+                                <p class="text-xl font-black text-white" id="cc-cur-rating-band_deed_94">---</p>
+                                <p class="text-xs text-gray-400 capitalize truncate" id="cc-cur-tier-band_deed_94">Syncing...</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Maximum</p>
+                                <p class="text-xl font-black text-gray-300" id="cc-max-rating-band_deed_94">---</p>
+                                <p class="text-xs text-gray-500 capitalize truncate" id="cc-max-tier-band_deed_94">Syncing...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card bg-gray-900/80 p-8 rounded-[2rem] border border-gray-800 relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-green-900/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between mb-8 relative z-10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-4 h-12 bg-green-500 rounded-sm shadow-[0_0_15px_rgba(34,197,94,0.6)]"></div>
+                            <div>
+                                <h4 class="text-2xl text-white font-black">Anikur Rahman</h4>
+                                <p class="text-sm text-gray-500 font-mono mt-1"><i class="fa-solid fa-id-card"></i> ID: 252002104</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 relative z-10 bg-black/50 p-5 rounded-2xl border border-gray-800/50">
+                        <div class="border-r border-gray-800 pr-4">
+                            <h5 class="text-cobaltLight font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-chart-simple"></i> CF</h5>
+                            <div class="mb-4">
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Live Current</p>
+                                <p class="text-xl font-black text-white" id="cf-cur-rating-Onex">---</p>
+                                <p class="text-xs text-gray-400 capitalize truncate" id="cf-cur-tier-Onex">Syncing...</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Maximum</p>
+                                <p class="text-xl font-black text-gray-300" id="cf-max-rating-Onex">---</p>
+                                <p class="text-xs text-gray-500 capitalize truncate" id="cf-max-tier-Onex">Syncing...</p>
+                            </div>
+                        </div>
+                        <div class="pl-2">
+                            <h5 class="text-amber-500 font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-fire"></i> CC</h5>
+                            <div class="mb-4">
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Live Current</p>
+                                <p class="text-xl font-black text-white" id="cc-cur-rating-anik909">---</p>
+                                <p class="text-xs text-gray-400 capitalize truncate" id="cc-cur-tier-anik909">Syncing...</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Maximum</p>
+                                <p class="text-xl font-black text-gray-300" id="cc-max-rating-anik909">---</p>
+                                <p class="text-xs text-gray-500 capitalize truncate" id="cc-max-tier-anik909">Syncing...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card bg-gray-900/80 p-8 rounded-[2rem] border border-gray-800 relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-900/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between mb-8 relative z-10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-4 h-12 bg-blue-500 rounded-sm shadow-[0_0_15px_rgba(59,130,246,0.6)]"></div>
+                            <div>
+                                <h4 class="text-2xl text-white font-black">Abdul Kayum</h4>
+                                <p class="text-sm text-gray-500 font-mono mt-1"><i class="fa-solid fa-id-card"></i> ID: 252002093</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 relative z-10 bg-black/50 p-5 rounded-2xl border border-gray-800/50">
+                        <div class="border-r border-gray-800 pr-4">
+                            <h5 class="text-cobaltLight font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-chart-simple"></i> CF</h5>
+                            <div class="mb-4">
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Live Current</p>
+                                <p class="text-xl font-black text-white" id="cf-cur-rating-abdulkayum">---</p>
+                                <p class="text-xs text-gray-400 capitalize truncate" id="cf-cur-tier-abdulkayum">Syncing...</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Maximum</p>
+                                <p class="text-xl font-black text-gray-300" id="cf-max-rating-abdulkayum">---</p>
+                                <p class="text-xs text-gray-500 capitalize truncate" id="cf-max-tier-abdulkayum">Syncing...</p>
+                            </div>
+                        </div>
+                        <div class="pl-2">
+                            <h5 class="text-amber-500 font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-fire"></i> CC</h5>
+                            <div class="mb-4">
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Live Current</p>
+                                <p class="text-xl font-black text-white" id="cc-cur-rating-abdulkayum">---</p>
+                                <p class="text-xs text-gray-400 capitalize truncate" id="cc-cur-tier-abdulkayum">Syncing...</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Maximum</p>
+                                <p class="text-xl font-black text-gray-300" id="cc-max-rating-abdulkayum">---</p>
+                                <p class="text-xs text-gray-500 capitalize truncate" id="cc-max-tier-abdulkayum">Syncing...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-16">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tighter uppercase mb-4">Contest Trajectories</h2>
+                <p class="text-gray-500 font-mono uppercase tracking-widest">Live telemetry mapped via exact timestamps</p>
+            </div>
+
+            
+            <div class="glass-panel p-6 sm:p-8 lg:p-12 rounded-[3rem] shadow-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 sm:mb-12 gap-6">
+
+                    <div class="flex items-center gap-5">
+                        <div class="w-16 h-16 rounded-2xl bg-gray-900 border border-gray-800 flex items-center justify-center shadow-lg">
+                            <i class="fa-solid fa-chart-line text-3xl text-cobaltLight"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-black text-white">Codeforces</h3>
+                            <p class="text-gray-500 text-sm font-mono mt-1">user.rating API</p>
+                        </div>
+                    </div>
+                    <div class="px-6 py-3 bg-black/50 border border-gray-800 rounded-xl text-xs font-mono text-gray-400 uppercase tracking-widest flex items-center gap-3">
+                        <i class="fa-solid fa-filter text-cobaltLight"></i> Data from Sept 2025 Onward
+                    </div>
+                </div>
+                <div id="cf-loader" class="w-full h-[350px] md:h-[500px] lg:h-[600px] flex flex-col items-center justify-center text-cobaltLight font-mono gap-4 bg-gray-900/30 rounded-2xl border border-gray-800/50 border-dashed">
+                    <i class="fa-solid fa-cog fa-spin text-4xl"></i> Building CF Plot...
+                </div>
+                <div class="w-full h-[350px] md:h-[500px] lg:h-[600px] hidden" id="cf-canvas-container">
+                    <canvas id="cfChart"></canvas>
+                </div>
+
+            </div>
+
+                <div class="glass-panel p-6 sm:p-8 lg:p-12 rounded-[3rem] shadow-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 sm:mb-12 gap-6">
+
+                    <div class="flex items-center gap-5">
+                        <div class="w-16 h-16 rounded-2xl bg-gray-900 border border-gray-800 flex items-center justify-center shadow-lg">
+                            <i class="fa-solid fa-fire-flame-curved text-3xl text-amber-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-black text-white">CodeChef</h3>
+                            <p class="text-gray-500 text-sm font-mono mt-1">contest history</p>
+                        </div>
+                    </div>
+                    <div class="px-6 py-3 bg-black/50 border border-gray-800 rounded-xl text-xs font-mono text-gray-400 uppercase tracking-widest flex items-center gap-3">
+                        <i class="fa-solid fa-filter text-amber-500"></i> Data from Sept 2025 Onward
+                    </div>
+                </div>
+                <div id="cc-loader" class="w-full h-[350px] md:h-[500px] lg:h-[600px] flex flex-col items-center justify-center text-amber-500 font-mono gap-4 bg-gray-900/30 rounded-2xl border border-gray-800/50 border-dashed">
+                    <i class="fa-solid fa-cog fa-spin text-4xl"></i> Building CC Plot...
+                </div>
+                <div class="w-full h-[350px] md:h-[500px] lg:h-[600px] hidden" id="cc-canvas-container">
+                    <canvas id="ccChart"></canvas>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="glass-panel p-16 lg:p-24 rounded-[3rem] relative overflow-hidden flex flex-col items-center justify-center text-center border-dashed border-2 border-gray-700 hover:border-gray-500 transition-colors duration-500">
+                <h2 class="text-3xl sm:text-4xl lg:text-7xl font-black text-gray-600 mb-6 uppercase tracking-tighter relative z-10">IUPC & ICPC</h2>
+
+            <p class="text-gray-500 font-mono text-xl uppercase tracking-widest mb-10 relative z-10">Collegiate Programming History</p>
+            <div class="inline-flex items-center gap-4 px-8 py-4 bg-black border border-gray-800 rounded-2xl shadow-2xl relative z-10">
+                <i class="fa-solid fa-lock text-yellow-600"></i>
+                <span class="text-gray-400 font-bold text-sm tracking-widest uppercase">Sector Locked. Awaiting Future Contests.</span>
+            </div>
+        </section>
+
+        <!-- Achievements (Locked) -->
+        <section class="glass-panel p-6 sm:p-10 lg:p-16 rounded-[3rem] shadow-2xl relative overflow-hidden border border-gray-800">
+            <div class="flex items-center justify-between gap-6 flex-col sm:flex-row text-center sm:text-left">
+                <div class="">
+                    <h2 class="text-2xl sm:text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter">
+                        Achievements
+                    </h2>
+
+                    <p class="text-gray-500 font-mono uppercase tracking-widest text-xs sm:text-sm mt-2">
+                        Locked Preview Mode
+                    </p>
+                </div>
+                <div class="inline-flex items-center gap-3 px-6 py-3 bg-black/50 border border-gray-800 rounded-2xl shadow-2xl">
+                    <i class="fa-solid fa-lock text-yellow-600"></i>
+                    <span class="text-gray-400 font-bold text-xs sm:text-sm tracking-widest uppercase">Awaiting Official Updates</span>
+                </div>
+            </div>
+
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-900/50 p-6 rounded-[2rem] border border-gray-800">
+                    <p class="text-gray-500 text-[11px] font-black uppercase tracking-widest">Most Improved</p>
+                    <p class="text-white font-black text-3xl mt-3">—</p>
+                    <p class="text-gray-500 text-sm mt-2">Syncing...</p>
+                </div>
+                <div class="bg-gray-900/50 p-6 rounded-[2rem] border border-gray-800">
+                    <p class="text-gray-500 text-[11px] font-black uppercase tracking-widest">Top Performance</p>
+                    <p class="text-white font-black text-3xl mt-3">—</p>
+                    <p class="text-gray-500 text-sm mt-2">Syncing...</p>
+                </div>
+                <div class="bg-gray-900/50 p-6 rounded-[2rem] border border-gray-800">
+                    <p class="text-gray-500 text-[11px] font-black uppercase tracking-widest">Team Rankings</p>
+                    <p class="text-white font-black text-3xl mt-3">—</p>
+                    <p class="text-gray-500 text-sm mt-2">Syncing...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-10 glass-panel p-6 sm:p-8 lg:p-12 rounded-[3rem] shadow-2xl border border-gray-800 relative z-10">
+
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="">
+                    <p class="text-white font-black text-lg">GUB_Dragons</p>
+                    <p class="text-gray-500 font-mono text-sm mt-1">Competitive Programming Team Portal</p>
+                </div>
+                <div class="text-center md:text-right">
+                    <p class="text-gray-400 text-xs sm:text-sm">
+                        © <span id="year"></span> GUB_Dragons. All rights reserved.
+                    </p>
+                    <p class="text-gray-500 text-[11px] sm:text-xs font-mono mt-2">
+                        Built with Tailwind CSS + Chart.js • Live telemetry dashboard
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    
+    <script src="tailwind.config.js"></script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
