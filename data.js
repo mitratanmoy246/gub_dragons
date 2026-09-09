@@ -6,7 +6,7 @@ export const teamMembers = [
         name: "Tanmoy Mitra",
         id: "252002055",
         cf: "mitratanmoy246",
-        cc: "band_deed_94",
+        cc: "kryven",
         color: "#ef4444", // Red
         bgColor: "rgba(239, 68, 68, 0.1)"
     },
