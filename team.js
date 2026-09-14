@@ -1,30 +1,61 @@
-// Universal Base: Sept 1, 2025 at 00:00 UTC
-export const BASE_DATE = '2025-09-01T00:00:00Z';
-export const BASE_TIMESTAMP = new Date(BASE_DATE).getTime() / 1000;
-
 export const teamMembers = [
     {
         name: "Tanmoy Mitra",
-        id: "252002055",
-        cf: "mitratanmoy246",
+        cfAccounts: [
+            "mitratanmoy246",
+            "KryVen"
+        ],
         cc: "kryven",
-        color: "#ef4444", // Red
-        bgColor: "rgba(239, 68, 68, 0.2)"
+
+        cfColors: {
+            mitratanmoy246: "#ef4444",
+            KryVen: "#60a5fa"
+        },
+
+        bgColors: {
+            mitratanmoy246: "rgba(239,68,68,0.1)",
+            KryVen: "rgba(96,165,250,0.1)"
+        },
+
+        color: "#ef4444",
+        bgColor: "rgba(239,68,68,0.1)"
     },
+
     {
         name: "Anikur Rahman",
-        id: "252002104",
-        cf: "Onex",
+        cfAccounts: [
+            "Onex"
+        ],
         cc: "anik909",
-        color: "#22c55e", // Green
-        bgColor: "rgba(34, 197, 94, 0.2)"
+
+        cfColors: {
+            Onex: "#22c55e"
+        },
+
+        bgColors: {
+            Onex: "rgba(34,197,94,0.1)"
+        },
+
+        color: "#22c55e",
+        bgColor: "rgba(34,197,94,0.1)"
     },
+
     {
         name: "Abdul Kayum",
-        id: "252002093",
-        cf: "abdulkayum",
+        cfAccounts: [
+            "abdulkayum"
+        ],
         cc: "abdulkayum",
-        color: "#3b82f6", // Blue
-        bgColor: "rgba(59, 130, 246, 0.2)"
+
+        cfColors: {
+            abdulkayum: "#3b82f6"
+        },
+
+        bgColors: {
+            abdulkayum: "rgba(59,130,246,0.1)"
+        },
+
+        color: "#3b82f6",
+        bgColor: "rgba(59,130,246,0.1)"
     }
 ];
