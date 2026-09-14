@@ -8,16 +8,33 @@ function renderGraph(canvasId, datasets) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
 
-    const mappedData = datasets.map(member => ({
-        label: member.name,
-        data: member.history,
-        borderColor: member.color,
-        backgroundColor: member.bgColor,
+    const mappedData = datasets.flatMap(member => {
+        if (member.cfAccounts) {
+            return member.cfAccounts.map(acc => ({
+                name: acc,
+                history: member.histories[acc],
+                color: member.cfColors[acc],
+                bgColor: member.bgColors[acc]
+            }));
+        }
+
+        return [{
+            name: member.name,
+            history: member.history,
+            color: member.color,
+            bgColor: member.bgColor
+        }];
+    });
+
+    const styledDatasets = mappedData.map(d => ({
+        label: d.name,
+        data: d.history,
+        borderColor: d.color,
+        backgroundColor: d.bgColor,
         fill: false,
         tension: 0.15
     }));
 
-    // Mobile/desktop-aware chart styling to prevent clutter.
     const w = window.innerWidth;
     const isSm = w < 640;
     const isMd = w >= 640 && w < 1024;
@@ -32,37 +49,50 @@ function renderGraph(canvasId, datasets) {
     const maxYTicks = isSm ? 5 : isMd ? 6 : 8;
     const tooltipPadding = isSm ? 8 : 15;
 
-    // Apply computed styling to dataset objects.
-    const styledDatasets = mappedData.map(d => ({
+    const finalData = styledDatasets.map(d => ({
         ...d,
         borderWidth,
         pointRadius,
         pointHoverRadius,
         pointBackgroundColor: d.borderColor,
         pointBorderColor: '#000',
-        pointBorderWidth: 2,
+        pointBorderWidth: 2
     }));
 
     new Chart(canvas.getContext('2d'), {
         type: 'line',
-        data: { datasets: styledDatasets },
+        data: {
+            datasets: finalData
+        },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: { mode: 'nearest', axis: 'x', intersect: false },
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+            },
             plugins: {
                 legend: {
                     position: 'top',
                     labels: {
                         usePointStyle: true,
                         padding: legendPadding,
-                        font: { size: legendFontSize, weight: 'bold' }
+                        font: {
+                            size: legendFontSize,
+                            weight: 'bold'
+                        }
                     }
                 },
                 tooltip: {
                     backgroundColor: 'rgba(10,10,10,0.95)',
-                    titleFont: { size: isSm ? 12 : 14 },
-                    bodyFont: { size: isSm ? 12 : 14, weight: 'bold' },
+                    titleFont: {
+                        size: isSm ? 12 : 14
+                    },
+                    bodyFont: {
+                        size: isSm ? 12 : 14,
+                        weight: 'bold'
+                    },
                     padding: tooltipPadding,
                     borderColor: 'rgba(255,255,255,0.1)',
                     borderWidth: 1
@@ -71,61 +101,100 @@ function renderGraph(canvasId, datasets) {
             scales: {
                 x: {
                     type: 'time',
-                    time: { unit: 'month', tooltipFormat: 'MMM d, yyyy' },
+                    time: {
+                        unit: 'month',
+                        tooltipFormat: 'MMM d, yyyy'
+                    },
                     min: '2025-09-01T00:00:00Z',
-                    grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
-                    ticks: { font: { size: tickFontSize }, maxTicksLimit: maxXTicks }
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        font: {
+                            size: tickFontSize
+                        },
+                        maxTicksLimit: maxXTicks
+                    }
                 },
                 y: {
-                    // REMOVED beginAtZero: true so graph tracks natural ratings accurately
-                    grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
-                    ticks: { font: { size: tickFontSize }, maxTicksLimit: maxYTicks }
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        font: {
+                            size: tickFontSize
+                        },
+                        maxTicksLimit: maxYTicks
+                    }
                 }
             }
         }
     });
 }
 
-
 async function startEngine() {
     console.log("🚀 GUB_Dragons Telemetry System Booting...");
 
-    // 1. Load Profiles & Populate UI
+    // 1. Load Profiles
     for (const member of teamMembers) {
-        const cf = await getCFProfile(member.cf);
-        const cc = await getCCProfile(member.cc);
-        
+
         // Codeforces
-        document.getElementById(`cf-cur-rating-${member.cf}`).textContent = cf.curRating;
-        document.getElementById(`cf-cur-tier-${member.cf}`).textContent = cf.curTier;
-        document.getElementById(`cf-max-rating-${member.cf}`).textContent = cf.maxRating;
-        document.getElementById(`cf-max-tier-${member.cf}`).textContent = cf.maxTier;
-        
+        for (const acc of member.cfAccounts) {
+            const cf = await getCFProfile(acc);
+
+            document.getElementById(`cf-cur-rating-${acc}`).textContent = cf.curRating;
+            document.getElementById(`cf-cur-tier-${acc}`).textContent = cf.curTier;
+            document.getElementById(`cf-max-rating-${acc}`).textContent = cf.maxRating;
+            document.getElementById(`cf-max-tier-${acc}`).textContent = cf.maxTier;
+        }
+
         // CodeChef
+        const cc = await getCCProfile(member.cc);
+
         document.getElementById(`cc-cur-rating-${member.cc}`).textContent = cc.curRating;
         document.getElementById(`cc-cur-tier-${member.cc}`).textContent = cc.curTier;
         document.getElementById(`cc-max-rating-${member.cc}`).textContent = cc.maxRating;
         document.getElementById(`cc-max-tier-${member.cc}`).textContent = cc.maxTier;
     }
 
-    // 2. Build & Mount Codeforces Graph
-    let cfData = [];
+    // 2. Build Codeforces Graph
+    const cfData = [];
+
     for (const member of teamMembers) {
-        cfData.push({ ...member, history: await getCFHistory(member.cf) });
+        const histories = {};
+
+        for (const acc of member.cfAccounts) {
+            histories[acc] = await getCFHistory(acc);
+        }
+
+        cfData.push({
+            ...member,
+            histories
+        });
     }
+
     document.getElementById('cf-loader').classList.add('hidden');
     document.getElementById('cf-canvas-container').classList.remove('hidden');
+
     renderGraph('cfChart', cfData);
 
-    // 3. Build & Mount CodeChef Graph
-    let ccData = [];
+    // 3. Build CodeChef Graph
+    const ccData = [];
+
     for (const member of teamMembers) {
-        ccData.push({ ...member, history: await getCCHistory(member.cc) });
+        ccData.push({
+            ...member,
+            history: await getCCHistory(member.cc)
+        });
     }
+
     document.getElementById('cc-loader').classList.add('hidden');
     document.getElementById('cc-canvas-container').classList.remove('hidden');
+
     renderGraph('ccChart', ccData);
-    
+
     console.log("✅ Boot Sequence Complete.");
 }
 
