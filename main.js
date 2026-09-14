@@ -1,201 +1,575 @@
-import { teamMembers } from './team.js';
-import { getCFProfile, getCCProfile, getCFHistory, getCCHistory } from './api.js';
+import {
+    teamMembers,
+    achievements
+} from "./team.js";
 
-Chart.defaults.color = '#9ca3af';
-Chart.defaults.font.family = '"Fira Code", monospace';
+import {
+    loadAllData
+} from "./api.js";
 
-function renderGraph(canvasId, datasets) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
+import {
+    renderCFChart,
+    renderCCChart,
+    getCCStars
+} from "./charts.js";
 
-    const mappedData = datasets.flatMap(member => {
-        if (member.cfAccounts) {
-            return member.cfAccounts.map(acc => ({
-                name: acc,
-                history: member.histories[acc],
-                color: member.cfColors[acc],
-                bgColor: member.bgColors[acc]
-            }));
-        }
+const $ =
+    id =>
+        document.getElementById(id);
 
-        return [{
-            name: member.name,
-            history: member.history,
-            color: member.color,
-            bgColor: member.bgColor
-        }];
+function esc(value) {
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+function rating(value) {
+    if (
+        value === null ||
+        value === undefined ||
+        !Number(value)
+    ) {
+        return "—";
+    }
+
+    return Number(value)
+        .toLocaleString();
+}
+
+function stars(value) {
+    const n =
+        getCCStars(value);
+
+    if (!n)
+        return "—";
+
+    return "★".repeat(n);
+}
+
+function renderOperators(data={}) {
+    const grid =
+        $("teamGrid");
+
+    if (!grid)
+        return;
+
+    grid.innerHTML =
+        teamMembers.map(
+            (member,index) => {
+
+                const d =
+                    data[member.id] || {};
+
+                const cf =
+                    d.cf || {};
+
+                const cc =
+                    d.cc || {};
+
+                return `
+                    <article
+                        class="operator-card"
+                        style="--member:${member.color}"
+                    >
+
+                        <div class="operator-head">
+
+                            <div class="operator-id">
+                                ${String(index+1)
+                                    .padStart(2,"0")}
+                            </div>
+
+                            <div class="operator-role">
+                                ${esc(member.role)}
+                            </div>
+
+                        </div>
+
+                        <div class="operator-name">
+                            ${esc(member.name)}
+                        </div>
+
+                        <div class="operator-code">
+                            ID // ${esc(member.id)}
+                        </div>
+
+                        <div class="operator-ratings">
+
+                            <div class="rating-box">
+                                <span>CF MAX</span>
+                                <strong>
+                                    ${rating(cf.max)}
+                                </strong>
+                            </div>
+
+                            <div class="rating-box">
+                                <span>CC MAX</span>
+                                <strong>
+                                    ${rating(cc.max)}
+                                </strong>
+                            </div>
+
+                            <div class="rating-box">
+                                <span>CF CURRENT</span>
+                                <strong>
+                                    ${rating(cf.current)}
+                                </strong>
+                            </div>
+
+                            <div class="rating-box">
+                                <span>CC CURRENT</span>
+                                <strong>
+                                    ${rating(cc.current)}
+                                </strong>
+                            </div>
+
+                        </div>
+
+                        <div class="operator-platforms">
+
+                            <div>
+                                <span>CODEFORCES</span>
+                                <b>
+                                    ${esc(member.cf)}
+                                </b>
+                            </div>
+
+                            <div>
+                                <span>CODECHEF</span>
+                                <b>
+                                    ${
+                                        member.cc
+                                            ? esc(member.cc)
+                                            : "PRIVATE"
+                                    }
+                                </b>
+                            </div>
+
+                        </div>
+
+                    </article>
+                `;
+            }
+        ).join("");
+}
+
+function renderSnapshot(data={}) {
+    const grid =
+        $("snapshotGrid");
+
+    if (!grid)
+        return;
+
+    grid.innerHTML =
+        teamMembers.map(
+            member => {
+
+                const d =
+                    data[member.id] || {};
+
+                const cf =
+                    d.cf || {};
+
+                const cc =
+                    d.cc || {};
+
+                return `
+                    <div
+                        class="snapshot-card"
+                        style="--member:${member.color}"
+                    >
+
+                        <div class="snapshot-top">
+                            <span>
+                                ${esc(member.name)}
+                            </span>
+
+                            <i></i>
+                        </div>
+
+                        <div class="snapshot-values">
+
+                            <div>
+                                <small>CF</small>
+
+                                <strong>
+                                    ${rating(cf.current)}
+                                </strong>
+                            </div>
+
+                            <div>
+                                <small>CC</small>
+
+                                <strong>
+                                    ${rating(cc.current)}
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+            }
+        ).join("");
+}
+
+function renderAchievements() {
+    const grid =
+        $("achievementGrid");
+
+    if (!grid)
+        return;
+
+    grid.innerHTML =
+        achievements.map(
+            (item,index) => {
+
+                const media =
+                    item.image
+                        ? `
+                            <div class="achievement-media">
+                                <img
+                                    src="${esc(item.image)}"
+                                    alt="${esc(item.title)}"
+                                    loading="lazy"
+                                >
+                                <div class="image-fallback">
+                                    IMAGE UNAVAILABLE
+                                </div>
+                            </div>
+                        `
+                        : `
+                            <div class="achievement-media image-missing">
+                                <div class="image-fallback">
+                                    ARCHIVE IMAGE UNAVAILABLE
+                                </div>
+                            </div>
+                        `;
+
+                return `
+                    <article class="achievement-card">
+
+                        ${media}
+
+                        <div class="achievement-content">
+
+                            <div class="achievement-index">
+                                ARCHIVE //
+                                ${String(index+1)
+                                    .padStart(2,"0")}
+                            </div>
+
+                            <h3>
+                                ${esc(item.title)}
+                            </h3>
+
+                            <div class="achievement-place">
+                                ${esc(item.place)}
+                            </div>
+
+                            <div class="achievement-meta">
+                                ${esc(item.teams)}
+                            </div>
+
+                            <div class="achievement-team">
+                                ${esc(item.team)}
+                            </div>
+
+                            <div class="achievement-members">
+                                ${esc(item.members)}
+                            </div>
+
+                        </div>
+
+                    </article>
+                `;
+            }
+        ).join("");
+
+    const archiveImages = grid.querySelectorAll('.achievement-media img');
+    archiveImages.forEach(img => {
+        img.addEventListener('error', function() {
+            this.style.display = 'none';
+            this.parentElement.classList.add('image-missing');
+        });
     });
 
-    const styledDatasets = mappedData.map(d => ({
-        label: d.name,
-        data: d.history,
-        borderColor: d.color,
-        backgroundColor: d.bgColor,
-        fill: false,
-        tension: 0.15
-    }));
+    const count =
+        $("achievementCount");
 
-    const w = window.innerWidth;
-    const isSm = w < 640;
-    const isMd = w >= 640 && w < 1024;
+    if (count) {
+        count.textContent =
+            String(achievements.length)
+                .padStart(2,"0");
+    }
+}
 
-    const borderWidth = isSm ? 2 : isMd ? 3 : 4;
-    const pointRadius = isSm ? 2 : isMd ? 3 : 5;
-    const pointHoverRadius = isSm ? 4 : isMd ? 6 : 9;
-    const legendPadding = isSm ? 10 : isMd ? 20 : 30;
-    const legendFontSize = isSm ? 11 : isMd ? 13 : 15;
-    const tickFontSize = isSm ? 10 : isMd ? 11 : 13;
-    const maxXTicks = isSm ? 6 : isMd ? 8 : 12;
-    const maxYTicks = isSm ? 5 : isMd ? 6 : 8;
-    const tooltipPadding = isSm ? 8 : 15;
+function renderStats() {
+    const operators =
+        $("statOperators");
 
-    const finalData = styledDatasets.map(d => ({
-        ...d,
-        borderWidth,
-        pointRadius,
-        pointHoverRadius,
-        pointBackgroundColor: d.borderColor,
-        pointBorderColor: '#000',
-        pointBorderWidth: 2
-    }));
+    const core =
+        $("statCore");
 
-    new Chart(canvas.getContext('2d'), {
-        type: 'line',
-        data: {
-            datasets: finalData
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                mode: 'nearest',
-                axis: 'x',
-                intersect: false
-            },
-            plugins: {
-                legend: {
-                    position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        padding: legendPadding,
-                        font: {
-                            size: legendFontSize,
-                            weight: 'bold'
-                        }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(10,10,10,0.95)',
-                    titleFont: {
-                        size: isSm ? 12 : 14
-                    },
-                    bodyFont: {
-                        size: isSm ? 12 : 14,
-                        weight: 'bold'
-                    },
-                    padding: tooltipPadding,
-                    borderColor: 'rgba(255,255,255,0.1)',
-                    borderWidth: 1
+    const hero =
+        $("heroOperators");
+
+    if (operators) {
+        operators.textContent =
+            String(
+                teamMembers.length
+            ).padStart(2,"0");
+    }
+
+    if (core) {
+        core.textContent =
+            String(
+                teamMembers.filter(
+                    x =>
+                        x.role === "CORE"
+                ).length
+            ).padStart(2,"0");
+    }
+
+    if (hero) {
+        hero.textContent =
+            String(
+                teamMembers.length
+            ).padStart(2,"0");
+    }
+}
+
+function setChartState(
+    id,
+    text,
+    hide=false
+) {
+    const el =
+        $(id);
+
+    if (!el)
+        return;
+
+    el.textContent =
+        text;
+
+    el.style.display =
+        hide
+            ? "none"
+            : "";
+}
+
+function hasCFData(data) {
+    return teamMembers.some(
+        member =>
+            data[member.id]
+                ?.cf
+                ?.history
+                ?.length > 0
+    );
+}
+
+function hasCCData(data) {
+    return teamMembers.some(
+        member =>
+            data[member.id]
+                ?.cc
+                ?.history
+                ?.length > 0
+    );
+}
+
+function renderCF(data) {
+    if (!hasCFData(data))
+        return;
+
+    setChartState(
+        "cfChartState",
+        "",
+        true
+    );
+
+    requestAnimationFrame(
+        () => {
+            renderCFChart(
+                "cfChart",
+                teamMembers,
+                data
+            );
+        }
+    );
+}
+
+function renderCC(data) {
+    if (!hasCCData(data))
+        return;
+
+    setChartState(
+        "ccChartState",
+        "",
+        true
+    );
+
+    requestAnimationFrame(
+        () => {
+            renderCCChart(
+                "ccChart",
+                teamMembers,
+                data
+            );
+        }
+    );
+}
+
+async function init() {
+    const start =
+        performance.now();
+
+    const data = {};
+
+    renderOperators(data);
+    renderSnapshot(data);
+    renderAchievements();
+    renderStats();
+
+    setChartState(
+        "cfChartState",
+        "BUILDING"
+    );
+
+    setChartState(
+        "ccChartState",
+        "BUILDING"
+    );
+
+    await loadAllData(
+        teamMembers,
+        update => {
+
+            if (!update)
+                return;
+
+            if (
+                update.data
+            ) {
+                Object.assign(
+                    data,
+                    update.data
+                );
+            }
+
+            if (
+                update.type === "cf"
+            ) {
+                renderOperators(data);
+                renderSnapshot(data);
+
+                if (
+                    hasCFData(data)
+                ) {
+                    renderCF(data);
                 }
-            },
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'month',
-                        tooltipFormat: 'MMM d, yyyy'
-                    },
-                    min: '2025-09-01T00:00:00Z',
-                    grid: {
-                        color: 'rgba(255,255,255,0.05)',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        font: {
-                            size: tickFontSize
-                        },
-                        maxTicksLimit: maxXTicks
-                    }
-                },
-                y: {
-                    grid: {
-                        color: 'rgba(255,255,255,0.05)',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        font: {
-                            size: tickFontSize
-                        },
-                        maxTicksLimit: maxYTicks
-                    }
+            }
+
+            if (
+                update.type === "cc"
+            ) {
+                renderOperators(data);
+                renderSnapshot(data);
+
+                if (
+                    hasCCData(data)
+                ) {
+                    renderCC(data);
+                }
+            }
+
+            if (
+                update.type ===
+                "cf-complete"
+            ) {
+                if (
+                    hasCFData(data)
+                ) {
+                    renderCF(data);
+                } else {
+                    setChartState(
+                        "cfChartState",
+                        "DATA UNAVAILABLE"
+                    );
+                }
+            }
+
+            if (
+                update.type ===
+                "cc-complete"
+            ) {
+                if (
+                    hasCCData(data)
+                ) {
+                    renderCC(data);
+                } else {
+                    setChartState(
+                        "ccChartState",
+                        "CODECHEF DATA UNAVAILABLE"
+                    );
                 }
             }
         }
-    });
+    );
+
+    renderOperators(data);
+    renderSnapshot(data);
+    renderStats();
+
+    if (hasCFData(data)) {
+        renderCF(data);
+    } else {
+        setChartState(
+            "cfChartState",
+            "DATA UNAVAILABLE"
+        );
+    }
+
+    if (hasCCData(data)) {
+        renderCC(data);
+    } else {
+        setChartState(
+            "ccChartState",
+            "CODECHEF DATA UNAVAILABLE"
+        );
+    }
+
+    const elapsed =
+        Math.round(
+            performance.now() -
+            start
+        );
+
+    console.log(
+        `GUB_Dragons initialized in ${elapsed}ms`
+    );
 }
 
-async function startEngine() {
-    console.log("🚀 GUB_Dragons Telemetry System Booting...");
+init().catch(
+    err => {
 
-    // 1. Load Profiles
-    for (const member of teamMembers) {
+        console.error(
+            "Portal initialization failed:",
+            err
+        );
 
-        // Codeforces
-        for (const acc of member.cfAccounts) {
-            const cf = await getCFProfile(acc);
+        setChartState(
+            "cfChartState",
+            "INITIALIZATION ERROR"
+        );
 
-            document.getElementById(`cf-cur-rating-${acc}`).textContent = cf.curRating;
-            document.getElementById(`cf-cur-tier-${acc}`).textContent = cf.curTier;
-            document.getElementById(`cf-max-rating-${acc}`).textContent = cf.maxRating;
-            document.getElementById(`cf-max-tier-${acc}`).textContent = cf.maxTier;
-        }
-
-        // CodeChef
-        const cc = await getCCProfile(member.cc);
-
-        document.getElementById(`cc-cur-rating-${member.cc}`).textContent = cc.curRating;
-        document.getElementById(`cc-cur-tier-${member.cc}`).textContent = cc.curTier;
-        document.getElementById(`cc-max-rating-${member.cc}`).textContent = cc.maxRating;
-        document.getElementById(`cc-max-tier-${member.cc}`).textContent = cc.maxTier;
+        setChartState(
+            "ccChartState",
+            "INITIALIZATION ERROR"
+        );
     }
-
-    // 2. Build Codeforces Graph
-    const cfData = [];
-
-    for (const member of teamMembers) {
-        const histories = {};
-
-        for (const acc of member.cfAccounts) {
-            histories[acc] = await getCFHistory(acc);
-        }
-
-        cfData.push({
-            ...member,
-            histories
-        });
-    }
-
-    document.getElementById('cf-loader').classList.add('hidden');
-    document.getElementById('cf-canvas-container').classList.remove('hidden');
-
-    renderGraph('cfChart', cfData);
-
-    // 3. Build CodeChef Graph
-    const ccData = [];
-
-    for (const member of teamMembers) {
-        ccData.push({
-            ...member,
-            history: await getCCHistory(member.cc)
-        });
-    }
-
-    document.getElementById('cc-loader').classList.add('hidden');
-    document.getElementById('cc-canvas-container').classList.remove('hidden');
-
-    renderGraph('ccChart', ccData);
-
-    console.log("✅ Boot Sequence Complete.");
-}
-
-window.addEventListener('load', startEngine);
+);
