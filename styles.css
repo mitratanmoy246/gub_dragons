@@ -25,11 +25,6 @@
     --max:1440px;
 }
 
-
-/* =========================================================
-   RESET
-========================================================= */
-
 * {
     box-sizing:border-box;
 }
@@ -78,11 +73,6 @@ a {
 button {
     font:inherit;
 }
-
-
-/* =========================================================
-   BACKGROUND
-========================================================= */
 
 .background {
     position:fixed;
@@ -173,11 +163,6 @@ button {
         url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
 }
 
-
-/* =========================================================
-   PAGE
-========================================================= */
-
 .page {
     width:min(
         calc(100% - 40px),
@@ -188,11 +173,6 @@ button {
     z-index:1;
 }
 
-
-/* =========================================================
-   HUD CORNERS
-========================================================= */
-
 .hud-corner {
     position:fixed;
     width:55px;
@@ -202,38 +182,10 @@ button {
     z-index:5;
 }
 
-.hud-tl {
-    left:18px;
-    top:18px;
-    border-left:1px solid var(--blue);
-    border-top:1px solid var(--blue);
-}
-
-.hud-tr {
-    right:18px;
-    top:18px;
-    border-right:1px solid var(--blue);
-    border-top:1px solid var(--blue);
-}
-
-.hud-bl {
-    left:18px;
-    bottom:18px;
-    border-left:1px solid var(--blue);
-    border-bottom:1px solid var(--blue);
-}
-
-.hud-br {
-    right:18px;
-    bottom:18px;
-    border-right:1px solid var(--blue);
-    border-bottom:1px solid var(--blue);
-}
-
-
-/* =========================================================
-   BOOT
-========================================================= */
+.hud-tl { left:18px; top:18px; border-left:1px solid var(--blue); border-top:1px solid var(--blue); }
+.hud-tr { right:18px; top:18px; border-right:1px solid var(--blue); border-top:1px solid var(--blue); }
+.hud-bl { left:18px; bottom:18px; border-left:1px solid var(--blue); border-bottom:1px solid var(--blue); }
+.hud-br { right:18px; bottom:18px; border-right:1px solid var(--blue); border-bottom:1px solid var(--blue); }
 
 .boot-screen {
     position:fixed;
@@ -276,8 +228,7 @@ button {
     border:1px solid rgba(85,160,255,.45);
     color:var(--blue-light);
     font:700 20px var(--mono);
-    box-shadow:
-        0 0 35px rgba(40,120,255,.12);
+    box-shadow:0 0 35px rgba(40,120,255,.12);
 }
 
 .boot-title {
@@ -314,11 +265,6 @@ button {
     font:600 12px var(--mono);
     letter-spacing:.1em;
 }
-
-
-/* =========================================================
-   TOPBAR
-========================================================= */
 
 .topbar {
     min-height:86px;
@@ -407,11 +353,6 @@ nav a {
 nav a:hover {
     color:var(--blue-light);
 }
-
-
-/* =========================================================
-   HERO
-========================================================= */
 
 .hero {
     min-height:620px;
@@ -546,11 +487,6 @@ nav a:hover {
     color:var(--green) !important;
 }
 
-
-/* =========================================================
-   COMMAND NODE
-========================================================= */
-
 .command-node {
     border:1px solid var(--border);
     background:
@@ -611,39 +547,17 @@ nav a:hover {
     transform:translate(-50%,-50%);
 }
 
-.r1 {
-    width:25%;
-    height:25%;
-}
-
-.r2 {
-    width:55%;
-    height:55%;
-}
-
-.r3 {
-    width:82%;
-    height:82%;
-}
+.r1 { width:25%; height:25%; }
+.r2 { width:55%; height:55%; }
+.r3 { width:82%; height:82%; }
 
 .radar-cross {
     position:absolute;
     background:rgba(85,160,255,.12);
 }
 
-.radar-cross.horizontal {
-    left:0;
-    right:0;
-    top:50%;
-    height:1px;
-}
-
-.radar-cross.vertical {
-    top:0;
-    bottom:0;
-    left:50%;
-    width:1px;
-}
+.radar-cross.horizontal { left:0; right:0; top:50%; height:1px; }
+.radar-cross.vertical { top:0; bottom:0; left:50%; width:1px; }
 
 .radar-sweep {
     position:absolute;
@@ -662,9 +576,7 @@ nav a:hover {
 }
 
 @keyframes radar {
-    to {
-        transform:rotate(360deg);
-    }
+    to { transform:rotate(360deg); }
 }
 
 .radar-dot {
@@ -676,20 +588,9 @@ nav a:hover {
     box-shadow:0 0 10px var(--blue);
 }
 
-.d1 {
-    left:33%;
-    top:27%;
-}
-
-.d2 {
-    right:22%;
-    top:55%;
-}
-
-.d3 {
-    left:25%;
-    bottom:25%;
-}
+.d1 { left:33%; top:27%; }
+.d2 { right:22%; top:55%; }
+.d3 { left:25%; bottom:25%; }
 
 .radar-core {
     position:absolute;
@@ -752,11 +653,6 @@ nav a:hover {
 .signal-bars i:nth-child(9) {height:12px}
 .signal-bars i:nth-child(10) {height:14px}
 
-
-/* =========================================================
-   TELEMETRY STRIP
-========================================================= */
-
 .telemetry-strip {
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -805,11 +701,6 @@ nav a:hover {
     background:var(--red);
 }
 
-
-/* =========================================================
-   METRICS
-========================================================= */
-
 .metrics {
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -855,11 +746,6 @@ nav a:hover {
     font:normal 600 10px var(--mono);
 }
 
-
-/* =========================================================
-   SECTIONS
-========================================================= */
-
 .section {
     margin-bottom:100px;
 }
@@ -893,14 +779,9 @@ nav a:hover {
     letter-spacing:.06em;
 }
 
-
-/* =========================================================
-   OPERATOR CARDS
-========================================================= */
-
 .operator-grid {
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:12px;
 }
 
@@ -1052,11 +933,6 @@ nav a:hover {
     opacity:.75;
 }
 
-
-/* =========================================================
-   TELEMETRY PANELS
-========================================================= */
-
 .telemetry-panel {
     position:relative;
     margin-bottom:18px;
@@ -1161,11 +1037,6 @@ nav a:hover {
     gap:10px;
 }
 
-
-/* =========================================================
-   ANALYTICS
-========================================================= */
-
 .analytics-grid {
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -1241,11 +1112,6 @@ nav a:hover {
             transparent
         );
 }
-
-
-/* =========================================================
-   ACTIVITY
-========================================================= */
 
 .activity-panel {
     border:1px solid var(--border);
@@ -1362,22 +1228,12 @@ nav a:hover {
     font:700 11px var(--mono);
 }
 
-.activity-delta .positive {
-    color:var(--green);
-}
-
-.activity-delta .negative {
-    color:var(--red);
-}
-
-
-/* =========================================================
-   SNAPSHOT
-========================================================= */
+.activity-delta .positive { color:var(--green); }
+.activity-delta .negative { color:var(--red); }
 
 .snapshot-grid {
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:10px;
 }
 
@@ -1437,11 +1293,6 @@ nav a:hover {
     font:600 9px var(--mono);
 }
 
-
-/* =========================================================
-   MILESTONES
-========================================================= */
-
 .milestone-grid {
     display:grid;
     grid-template-columns:repeat(5,1fr);
@@ -1487,11 +1338,6 @@ nav a:hover {
     font:600 8px var(--mono);
 }
 
-
-/* =========================================================
-   ARCHIVE
-========================================================= */
-
 .achievement-grid {
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -1530,8 +1376,7 @@ nav a:hover {
         filter .3s ease;
 }
 
-.achievement-card:hover
-.achievement-media img {
+.achievement-card:hover .achievement-media img {
     opacity:1;
     transform:scale(1.04);
     filter:
@@ -1543,8 +1388,7 @@ nav a:hover {
     display:none;
 }
 
-.achievement-media.image-missing
-.image-fallback {
+.achievement-media.image-missing .image-fallback {
     position:absolute;
     inset:0;
     display:flex;
@@ -1604,11 +1448,6 @@ nav a:hover {
     font:500 9px/1.6 var(--mono);
 }
 
-
-/* =========================================================
-   MISSION
-========================================================= */
-
 .mission {
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -1667,11 +1506,6 @@ nav a:hover {
     font:600 9px var(--mono);
 }
 
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
 footer {
     min-height:90px;
     display:flex;
@@ -1683,11 +1517,6 @@ footer {
     letter-spacing:.06em;
 }
 
-
-/* =========================================================
-   EMPTY
-========================================================= */
-
 .empty-state {
     padding:30px;
     text-align:center;
@@ -1695,283 +1524,146 @@ footer {
     font:600 10px var(--mono);
 }
 
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width:1100px) {
-
-    .topbar {
-        grid-template-columns:1fr auto;
-    }
-
-    nav {
-        grid-column:1/-1;
-        padding-bottom:15px;
-    }
-
-    .hero {
-        grid-template-columns:1fr;
-    }
-
-    .command-node {
-        max-width:650px;
-        width:100%;
-    }
-
-    .operator-grid {
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .snapshot-grid {
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .milestone-grid {
-        grid-template-columns:repeat(3,1fr);
-    }
+/* VAULT STYLES */
+.vault-overlay {
+    position:fixed;
+    inset:0;
+    z-index:200;
+    background:rgba(2,4,7,.92);
+    backdrop-filter:blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
 }
 
-
-@media (max-width:800px) {
-
-    .page {
-        width:min(
-            calc(100% - 24px),
-            var(--max)
-        );
-    }
-
-    .hud-corner {
-        display:none;
-    }
-
-    .topbar {
-        min-height:70px;
-        gap:15px;
-    }
-
-    .top-meta {
-        display:none;
-    }
-
-    .system-state {
-        margin-left:auto;
-    }
-
-    .hero {
-        min-height:auto;
-        padding:55px 0;
-    }
-
-    .hero h1 {
-        font-size:clamp(
-            46px,
-            14vw,
-            80px
-        );
-    }
-
-    .hero-stats {
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .hero-stats > div:nth-child(2) {
-        border-right:0;
-    }
-
-    .hero-stats > div:nth-child(-n+2) {
-        border-bottom:1px solid var(--border);
-    }
-
-    .telemetry-strip {
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .telemetry-cell:nth-child(2) {
-        border-right:0;
-    }
-
-    .telemetry-cell:nth-child(-n+2) {
-        border-bottom:1px solid var(--border);
-    }
-
-    .metrics {
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .metric:nth-child(2) {
-        border-right:0;
-    }
-
-    .metric:nth-child(-n+2) {
-        border-bottom:1px solid var(--border);
-    }
-
-    .analytics-grid {
-        grid-template-columns:1fr;
-    }
-
-    .achievement-grid {
-        grid-template-columns:1fr;
-    }
-
-    .mission {
-        grid-template-columns:1fr;
-        gap:30px;
-    }
-
-    .activity-row {
-        grid-template-columns:
-            42px
-            1fr
-            auto;
-    }
-
-    .activity-rating {
-        display:none;
-    }
-
-    .activity-delta,
-    .activity-rank {
-        text-align:right;
-    }
-
-    .milestone-grid {
-        grid-template-columns:repeat(2,1fr);
-    }
+.vault-overlay.hidden {
+    display:none !important;
 }
 
-
-@media (max-width:560px) {
-
-    body {
-        font-size:15px;
-    }
-
-    .page {
-        width:calc(100% - 18px);
-    }
-
-    .brand-subtitle {
-        display:none;
-    }
-
-    nav {
-        gap:14px;
-        overflow-x:auto;
-    }
-
-    nav a {
-        font-size:10px;
-        white-space:nowrap;
-    }
-
-    .hero-actions {
-        flex-direction:column;
-    }
-
-    .hud-button {
-        justify-content:space-between;
-    }
-
-    .command-node {
-        overflow:hidden;
-    }
-
-    .node-body {
-        grid-template-columns:1fr;
-    }
-
-    .radar {
-        width:180px;
-        height:180px;
-    }
-
-    .operator-grid {
-        grid-template-columns:1fr;
-    }
-
-    .snapshot-grid {
-        grid-template-columns:1fr;
-    }
-
-    .milestone-grid {
-        grid-template-columns:1fr 1fr;
-    }
-
-    .chart-info {
-        grid-template-columns:1fr;
-    }
-
-    .chart-info div {
-        border-right:0;
-        border-bottom:1px solid var(--border);
-    }
-
-    .chart-info div:last-child {
-        border-bottom:0;
-    }
-
-    .chart-box {
-        height:330px;
-    }
-
-    .achievement-card {
-        flex-direction:column;
-    }
-
-    .achievement-media {
-        width:100%;
-        height:190px;
-        border-right:0;
-        border-bottom:1px solid var(--border);
-    }
-
-    .activity-row {
-        grid-template-columns:
-            40px
-            1fr;
-        gap:10px;
-        padding:13px;
-    }
-
-    .activity-delta,
-    .activity-rank {
-        display:none;
-    }
-
-    .section-heading {
-        align-items:start;
-        flex-direction:column;
-        gap:8px;
-    }
-
-    .section-heading h2 {
-        font-size:24px;
-    }
-
-    footer {
-        flex-direction:column;
-        align-items:flex-start;
-        justify-content:center;
-        padding:20px 0;
-    }
+.vault-modal {
+    background:rgba(9,15,25,.95);
+    border:1px solid var(--red);
+    padding:30px;
+    width:100%;
+    max-width:400px;
+    box-shadow:0 0 40px rgba(239,68,68,.15);
+    text-align:center;
 }
 
-
-@media (prefers-reduced-motion:reduce) {
-
-    html {
-        scroll-behavior:auto;
-    }
-
-    *,
-    *::before,
-    *::after {
-        animation-duration:.01ms !important;
-        animation-iteration-count:1 !important;
-        transition-duration:.01ms !important;
-    }
+.vault-modal.vault-wide {
+    max-width:950px;
+    text-align:left;
+    padding:25px;
 }
+
+.vault-modal h3 {
+    color:var(--red);
+    font:700 16px var(--mono);
+    margin:0 0 15px;
+    letter-spacing:.05em;
+}
+
+.vault-modal p {
+    color:var(--dim);
+    font:600 11px var(--mono);
+    margin-bottom:20px;
+}
+
+.vault-modal input {
+    background:rgba(0,0,0,.5);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:12px;
+    font:600 16px var(--mono);
+    width:100%;
+    margin-bottom:15px;
+    text-align:center;
+    outline:none;
+}
+
+.vault-modal input:focus {
+    border-color:var(--red);
+}
+
+.vault-modal button.auth-btn {
+    background:rgba(239,68,68,.1);
+    border:1px solid var(--red);
+    color:var(--red);
+    padding:12px 20px;
+    font:700 12px var(--mono);
+    cursor:pointer;
+    width:100%;
+    transition:.2s ease;
+}
+
+.vault-modal button.auth-btn:hover {
+    background:var(--red);
+    color:#fff;
+}
+
+.vault-error {
+    color:var(--red);
+    font:600 10px var(--mono);
+    margin-top:12px;
+    min-height:15px;
+}
+
+.vault-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--red);
+    padding-bottom:15px;
+    margin-bottom:15px;
+}
+
+.vault-header button {
+    background:transparent;
+    border:1px solid var(--dim);
+    color:var(--dim);
+    padding:5px 10px;
+    font:600 10px var(--mono);
+    cursor:pointer;
+}
+
+.vault-header button:hover {
+    color:#fff;
+    border-color:#fff;
+}
+
+.vault-table-wrap {
+    max-height:60vh;
+    overflow-y:auto;
+}
+
+.vault-table {
+    width:100%;
+    border-collapse:collapse;
+    font:500 11px var(--mono);
+    text-align:left;
+}
+
+.vault-table th {
+    color:var(--red);
+    padding:12px;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    background:rgba(9,15,25,.98);
+    z-index:2;
+}
+
+.vault-table td {
+    padding:12px;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    color:#dce8f8;
+}
+
+.vault-table tr:hover td {
+    background:rgba(255,255,255,.03);
+}
+
+.verdict-ok { color:var(--green); font-weight:700; }
+.verdict-wa { color:var(--red); }
+.verdict-other { color:var(--muted); }

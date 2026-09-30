@@ -96,6 +96,7 @@
             <a href="#operators">ROSTER</a>
             <a href="#telemetry">TELEMETRY</a>
             <a href="#archive">ARCHIVE</a>
+            <a href="#" id="vaultBtn" style="color:var(--red);">[VAULT]</a>
         </nav>
 
     </header>
@@ -145,7 +146,7 @@
 
                 <div>
                     <span>OPERATORS</span>
-                    <strong id="heroOperators">04</strong>
+                    <strong id="heroOperators">03</strong>
                 </div>
 
                 <div>
@@ -282,7 +283,7 @@
 
             <div>
                 <small>ACTIVE OPERATORS</small>
-                <strong id="statOperators">04</strong>
+                <strong id="statOperators">03</strong>
             </div>
 
             <em>PERSONNEL</em>
@@ -315,7 +316,7 @@
 
             <div>
                 <small>ACHIEVEMENTS</small>
-                <strong id="achievementCount">04</strong>
+                <strong id="achievementCount">02</strong>
             </div>
 
             <em>VERIFIED</em>
@@ -684,6 +685,40 @@
 
     </footer>
 
+</div>
+
+<!-- SECURE VAULT OVERLAY MODAL -->
+<div id="vaultOverlay" class="vault-overlay hidden">
+    <div class="vault-modal" id="vaultLogin">
+        <h3>RESTRICTED AREA</h3>
+        <p>ENTER CLEARANCE CODE</p>
+        <input type="password" id="vaultPin" placeholder="***">
+        <button id="vaultSubmit" class="auth-btn">AUTHORIZE</button>
+        <div id="vaultError" class="vault-error"></div>
+    </div>
+    
+    <div class="vault-modal vault-wide hidden" id="vaultContent">
+        <div class="vault-header">
+            <h3 style="margin:0;">CF TRACKER // INTERNAL</h3>
+            <button id="vaultClose">CLOSE</button>
+        </div>
+        <div class="vault-table-wrap">
+            <table class="vault-table">
+                <thead>
+                    <tr>
+                        <th>PROBLEM</th>
+                        <th>NAME</th>
+                        <th>LATEST</th>
+                        <th>VERDICT</th>
+                        <th id="vaultTh0" style="text-align:center;"></th>
+                        <th id="vaultTh1" style="text-align:center;"></th>
+                        <th id="vaultTh2" style="text-align:center;"></th>
+                    </tr>
+                </thead>
+                <tbody id="vaultTbody"></tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script type="module" src="main.js"></script>

@@ -8,7 +8,6 @@ import {
     Legend
 } from "https://cdn.jsdelivr.net/npm/chart.js@4.4.7/+esm";
 
-
 Chart.register(
     LineController,
     LineElement,
@@ -18,38 +17,30 @@ Chart.register(
     Legend
 );
 
-
 const CF_BANDS = [
-
-    [0,1199,"NEWBIE"],
-    [1200,1399,"PUPIL"],
-    [1400,1599,"SPECIALIST"],
-    [1600,1899,"EXPERT"],
-    [1900,2099,"CANDIDATE MASTER"],
-    [2100,2299,"MASTER"],
-    [2300,2399,"INTERNATIONAL MASTER"],
-    [2400,2599,"GRANDMASTER"],
-    [2600,2999,"INTERNATIONAL GRANDMASTER"],
-    [3000,4000,"LEGENDARY GRANDMASTER"]
-
+    [0, 1199, "NEWBIE"],
+    [1200, 1399, "PUPIL"],
+    [1400, 1599, "SPECIALIST"],
+    [1600, 1899, "EXPERT"],
+    [1900, 2099, "CANDIDATE MASTER"],
+    [2100, 2299, "MASTER"],
+    [2300, 2399, "INTERNATIONAL MASTER"],
+    [2400, 2599, "GRANDMASTER"],
+    [2600, 2999, "INTERNATIONAL GRANDMASTER"],
+    [3000, 4000, "LEGENDARY GRANDMASTER"]
 ];
-
 
 const CC_BANDS = [
-
-    [0,1399,"1★"],
-    [1400,1599,"2★"],
-    [1600,1799,"3★"],
-    [1800,1999,"4★"],
-    [2000,2199,"5★"],
-    [2200,2499,"6★"],
-    [2500,3500,"7★"]
-
+    [0, 1399, "1★"],
+    [1400, 1599, "2★"],
+    [1600, 1799, "3★"],
+    [1800, 1999, "4★"],
+    [2000, 2199, "5★"],
+    [2200, 2499, "6★"],
+    [2500, 3500, "7★"]
 ];
 
-
 const CF_COLORS = [
-
     "rgba(130,130,130,.16)",
     "rgba(34,197,94,.16)",
     "rgba(59,130,246,.16)",
@@ -60,12 +51,9 @@ const CF_COLORS = [
     "rgba(236,72,153,.16)",
     "rgba(220,38,38,.16)",
     "rgba(255,255,255,.13)"
-
 ];
 
-
 const CC_COLORS = [
-
     "rgba(130,130,130,.16)",
     "rgba(255,255,255,.13)",
     "rgba(59,130,246,.16)",
@@ -73,16 +61,13 @@ const CC_COLORS = [
     "rgba(245,158,11,.16)",
     "rgba(249,115,22,.16)",
     "rgba(236,72,153,.16)"
-
 ];
-
 
 function getHistory(
     member,
     data,
     type
 ) {
-
     if (
         type === "cc" &&
         member.showCC !== true
@@ -90,108 +75,82 @@ function getHistory(
         return [];
     }
 
-
     const d =
         data[
             member.id
         ] || {};
 
-
     return type === "cf"
         ? d.cf?.history || []
         : d.cc?.history || [];
-
 }
-
 
 function makePoints(
     history
 ) {
-
     return history.map(
-        (x,i) => {
-
+        (x, i) => {
             const previous =
                 x.oldRating ??
                 (
                     i > 0
                         ? history[
-                            i-1
+                            i - 1
                         ].rating
                         : null
                 );
 
-
             return {
-
-                x:x.time,
-
-                y:x.rating,
-
+                x: x.time,
+                y: x.rating,
                 contestName:
                     x.contestName ||
                     "Unknown Contest",
-
                 contestId:
                     x.contestId ??
                     "—",
-
                 date:
                     new Date(
                         x.time
                     ).toLocaleDateString(
                         undefined,
                         {
-                            day:"2-digit",
-                            month:"short",
-                            year:"numeric"
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
                         }
                     ),
-
                 rating:
                     x.rating,
-
                 previous,
-
                 delta:
                     previous === null
                         ? null
                         : x.rating -
                             previous,
-
                 rank:
                     x.rank ??
                     "—"
-
             };
-
         }
     );
-
 }
-
 
 function bandPlugin(
     bands,
     colors
 ) {
-
     return {
-
-        id:"ratingBands",
-
+        id: "ratingBands",
         beforeDraw(chart) {
-
             const {
                 ctx,
                 chartArea,
                 scales
             } = chart;
 
-
             const y =
                 scales?.y;
-
 
             if (
                 !chartArea ||
@@ -200,19 +159,15 @@ function bandPlugin(
                 return;
             }
 
-
             ctx.save();
 
-
             for (
-                let i=0;
-                i<bands.length;
+                let i = 0;
+                i < bands.length;
                 i++
             ) {
-
                 const band =
                     bands[i];
-
 
                 const low =
                     Math.max(
@@ -220,13 +175,11 @@ function bandPlugin(
                         y.min
                     );
 
-
                 const high =
                     Math.min(
-                        band[1]+1,
+                        band[1] + 1,
                         y.max
                     );
-
 
                 if (
                     low >= high
@@ -234,51 +187,40 @@ function bandPlugin(
                     continue;
                 }
 
-
                 const top =
                     y.getPixelForValue(
                         high
                     );
-
 
                 const bottom =
                     y.getPixelForValue(
                         low
                     );
 
-
                 ctx.fillStyle =
                     colors[i];
-
 
                 ctx.fillRect(
                     chartArea.left,
                     top,
                     chartArea.right -
                         chartArea.left,
-                    bottom-top
+                    bottom - top
                 );
-
             }
 
-
             ctx.restore();
-
         },
 
-
         afterDraw(chart) {
-
             const {
                 ctx,
                 chartArea,
                 scales
             } = chart;
 
-
             const y =
                 scales?.y;
-
 
             if (
                 !chartArea ||
@@ -287,31 +229,24 @@ function bandPlugin(
                 return;
             }
 
-
             ctx.save();
-
 
             ctx.font =
                 "600 9px JetBrains Mono, monospace";
 
-
             ctx.textAlign =
                 "right";
-
 
             ctx.textBaseline =
                 "bottom";
 
-
             for (
-                let i=0;
-                i<bands.length;
+                let i = 0;
+                i < bands.length;
                 i++
             ) {
-
                 const band =
                     bands[i];
-
 
                 if (
                     band[1] < y.min ||
@@ -320,19 +255,16 @@ function bandPlugin(
                     continue;
                 }
 
-
                 const value =
                     Math.max(
                         band[0],
                         y.min
                     );
 
-
                 const py =
                     y.getPixelForValue(
                         value
                     );
-
 
                 if (
                     py <
@@ -343,28 +275,20 @@ function bandPlugin(
                     continue;
                 }
 
-
                 ctx.fillStyle =
                     "rgba(255,255,255,.48)";
 
-
                 ctx.fillText(
                     band[2],
-                    chartArea.right-8,
-                    py-4
+                    chartArea.right - 8,
+                    py - 4
                 );
-
             }
 
-
             ctx.restore();
-
         }
-
     };
-
 }
-
 
 function getBounds(
     members,
@@ -372,17 +296,14 @@ function getBounds(
     type,
     bands
 ) {
-
     let low =
         Infinity;
 
     let high =
         -Infinity;
 
-
     members.forEach(
         member => {
-
             const history =
                 getHistory(
                     member,
@@ -390,29 +311,23 @@ function getBounds(
                     type
                 );
 
-
             history.forEach(
                 x => {
-
                     low =
                         Math.min(
                             low,
                             x.rating
                         );
 
-
                     high =
                         Math.max(
                             high,
                             x.rating
                         );
-
                 }
             );
-
         }
     );
-
 
     if (
         !Number.isFinite(
@@ -422,23 +337,19 @@ function getBounds(
         return null;
     }
 
-
     let min =
         Math.max(
             0,
-            low-100
+            low - 100
         );
 
-
     let max =
-        high+150;
-
+        high + 150;
 
     const topBand =
         bands[
-            bands.length-1
+            bands.length - 1
         ][1];
-
 
     if (
         max > topBand
@@ -447,22 +358,18 @@ function getBounds(
             topBand;
     }
 
-
     if (
         max <= min
     ) {
         max =
-            min+100;
+            min + 100;
     }
-
 
     return {
         min,
         max
     };
-
 }
-
 
 function createChart(
     canvasId,
@@ -470,44 +377,36 @@ function createChart(
     data,
     type
 ) {
-
     const canvas =
         document.getElementById(
             canvasId
         );
 
-
     if (!canvas)
         return;
-
 
     const old =
         Chart.getChart(
             canvas
         );
 
-
     if (old)
         old.destroy();
-
 
     const bands =
         type === "cf"
             ? CF_BANDS
             : CC_BANDS;
 
-
     const colors =
         type === "cf"
             ? CF_COLORS
             : CC_COLORS;
 
-
     const datasets =
         members
             .map(
                 member => {
-
                     const history =
                         getHistory(
                             member,
@@ -515,16 +414,13 @@ function createChart(
                             type
                         );
 
-
                     if (
                         !history.length
                     ) {
                         return null;
                     }
 
-
                     return {
-
                         label:
                             member.name,
 
@@ -545,26 +441,22 @@ function createChart(
                         pointBorderColor:
                             member.color,
 
-                        pointRadius:2.5,
+                        pointRadius: 2.5,
 
-                        pointHoverRadius:6,
+                        pointHoverRadius: 6,
 
-                        borderWidth:2,
+                        borderWidth: 2,
 
-                        tension:.18,
+                        tension: .18,
 
-                        spanGaps:false
-
+                        spanGaps: false
                     };
-
                 }
             )
             .filter(Boolean);
 
-
     if (!datasets.length)
         return;
-
 
     const bounds =
         getBounds(
@@ -574,74 +466,65 @@ function createChart(
             bands
         );
 
-
     new Chart(
         canvas,
         {
+            type: "line",
 
-            type:"line",
-
-            data:{
+            data: {
                 datasets
             },
 
-            plugins:[
+            plugins: [
                 bandPlugin(
                     bands,
                     colors
                 )
             ],
 
-            options:{
+            options: {
+                responsive: true,
 
-                responsive:true,
+                maintainAspectRatio: false,
 
-                maintainAspectRatio:false,
-
-                animation:{
-                    duration:350
+                animation: {
+                    duration: 350
                 },
 
-                interaction:{
-                    mode:"nearest",
-                    intersect:false
+                interaction: {
+                    mode: "nearest",
+                    intersect: false
                 },
 
-                scales:{
+                scales: {
+                    x: {
+                        type: "linear",
 
-                    x:{
-
-                        type:"linear",
-
-                        grid:{
+                        grid: {
                             color:
                                 "rgba(255,255,255,.045)"
                         },
 
-                        ticks:{
-
+                        ticks: {
                             color:
                                 "rgba(255,255,255,.52)",
 
-                            maxTicksLimit:9,
+                            maxTicksLimit: 9,
 
-                            callback:value =>
+                            callback: value =>
                                 new Date(
                                     value
                                 ).toLocaleDateString(
                                     undefined,
                                     {
-                                        month:"short",
-                                        year:"numeric"
+                                        month: "short",
+                                        year: "numeric"
                                     }
                                 )
-
                         }
-
                     },
 
-                    y:{
-
+                    y: {
                         min:
                             bounds?.min ??
                             0,
@@ -650,58 +533,47 @@ function createChart(
                             bounds?.max ??
                             undefined,
 
-                        grid:{
+                        grid: {
                             color:
                                 "rgba(255,255,255,.065)"
                         },
 
-                        ticks:{
-
+                        ticks: {
                             color:
                                 "rgba(255,255,255,.62)",
 
-                            callback:value =>
+                            callback: value =>
                                 Number(
                                     value
                                 ).toLocaleString()
-
                         }
-
                     }
-
                 },
 
-                plugins:{
+                plugins: {
+                    legend: {
+                        display: true,
 
-                    legend:{
+                        position: "top",
 
-                        display:true,
+                        align: "start",
 
-                        position:"top",
-
-                        align:"start",
-
-                        labels:{
-
+                        labels: {
                             color:
                                 "rgba(255,255,255,.78)",
 
-                            usePointStyle:true,
+                            usePointStyle: true,
 
-                            pointStyle:"line",
+                            pointStyle: "line",
 
-                            padding:18,
+                            padding: 18,
 
-                            boxWidth:28
-
+                            boxWidth: 28
                         }
-
                     },
 
-
-                    tooltip:{
-
-                        enabled:true,
+                    tooltip: {
+                        enabled: true,
 
                         backgroundColor:
                             "rgba(4,7,13,.97)",
@@ -709,35 +581,30 @@ function createChart(
                         borderColor:
                             "rgba(255,255,255,.18)",
 
-                        borderWidth:1,
+                        borderWidth: 1,
 
-                        padding:12,
+                        padding: 12,
 
-                        titleColor:"#fff",
+                        titleColor: "#fff",
 
                         bodyColor:
                             "rgba(255,255,255,.82)",
 
-                        displayColors:true,
+                        displayColors: true,
 
-                        callbacks:{
-
+                        callbacks: {
                             title(items) {
-
                                 return (
                                     items[0]
                                         ?.raw
                                         ?.contestName ||
                                     "Contest"
                                 );
-
                             },
 
                             label(context) {
-
                                 const p =
                                     context.raw;
-
 
                                 const delta =
                                     p.delta === null
@@ -747,82 +614,57 @@ function createChart(
                                                 ? "+"
                                                 : ""
                                         ) +
-                                        p.delta;
-
+                                            p.delta;
 
                                 return [
-
                                     `MEMBER: ${context.dataset.label}`,
-
                                     `DATE: ${p.date}`,
-
                                     `RATING: ${p.rating}`,
-
                                     `PREVIOUS: ${p.previous ?? "—"}`,
-
                                     `DELTA: ${delta}`,
-
                                     `RANK: ${p.rank}`,
-
                                     `CONTEST ID: ${p.contestId}`
-
                                 ];
-
                             }
-
                         }
-
                     }
-
                 }
-
             }
-
         }
     );
-
 }
-
 
 export function renderCFChart(
     canvasId,
     members,
     data
 ) {
-
     createChart(
         canvasId,
         members,
         data,
         "cf"
     );
-
 }
-
 
 export function renderCCChart(
     canvasId,
     members,
     data
 ) {
-
     createChart(
         canvasId,
         members,
         data,
         "cc"
     );
-
 }
-
 
 export function getCCStars(
     value
 ) {
-
     const rating =
         Number(value);
-
 
     if (
         !Number.isFinite(
@@ -832,29 +674,13 @@ export function getCCStars(
         return 0;
     }
 
-
-    if (rating >= 2500)
-        return 7;
-
-    if (rating >= 2200)
-        return 6;
-
-    if (rating >= 2000)
-        return 5;
-
-    if (rating >= 1800)
-        return 4;
-
-    if (rating >= 1600)
-        return 3;
-
-    if (rating >= 1400)
-        return 2;
-
-    if (rating > 0)
-        return 1;
-
+    if (rating >= 2500) return 7;
+    if (rating >= 2200) return 6;
+    if (rating >= 2000) return 5;
+    if (rating >= 1800) return 4;
+    if (rating >= 1600) return 3;
+    if (rating >= 1400) return 2;
+    if (rating > 0) return 1;
 
     return 0;
-
 }

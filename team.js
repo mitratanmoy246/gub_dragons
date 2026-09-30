@@ -12,6 +12,7 @@ export const teamMembers = [
         id:"252002055",
         role:"CORE",
         cf:"mitratanmoy246",
+        privateCf:"kryven",
         cc:null,
         showCC:true,
         color:"#ef4444"
@@ -35,16 +36,6 @@ export const teamMembers = [
         cc:"abdulkayum",
         showCC:true,
         color:"#3b82f6"
-    },
-
-    {
-        name:"Md. Faisal Hossain",
-        id:"252034021",
-        role:"SUB",
-        cf:"mdfaisalhossain730",
-        cc:"crowd_glide_01",
-        showCC:true,
-        color:"#a855f7"
     }
 
 ];
@@ -63,16 +54,6 @@ export const achievements = [
     },
 
     {
-        title:"July Memorial Contest",
-        place:"1ST RUNNER-UP",
-        teams:"30 TEAMS",
-        team:"GUB_Dragons",
-        members:"Tanmoy Mitra · Md. Faisal Hossain",
-        image:"GUB_dragons_ru.png",
-        type:"runner"
-    },
-
-    {
         title:"Intra Green Programming Contest",
         place:"1ST RUNNER-UP",
         teams:"70 TEAMS",
@@ -80,16 +61,6 @@ export const achievements = [
         members:"Tanmoy Mitra · Anikur Rahman",
         image:"code_grey_ru.png",
         type:"runner"
-    },
-
-    {
-        title:"Intra Green Programming Contest",
-        place:"6TH PLACE",
-        teams:"70 TEAMS",
-        team:"Ebar_Comeback_Ditei_Hobe",
-        members:"Abdul Kayum · Md. Faisal Hossain",
-        image:null,
-        type:"top"
     }
 
 ];

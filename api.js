@@ -2,52 +2,44 @@ import {
     BASE_TIMESTAMP
 } from "./team.js";
 
-
 const CF_API =
     "https://codeforces.com/api";
 
 const CC_API =
     "https://codechef-stats-api-two.vercel.app";
 
-
 const FETCH_TIMEOUT = 3000;
 const CF_TOTAL_TIMEOUT = 9000;
 const CF_DELAY = 900;
 const CACHE_TIME = 30 * 60 * 1000;
 
-
 const cache =
     new Map();
-
 
 function sleep(ms) {
     return new Promise(
         resolve =>
-            setTimeout(resolve,ms)
+            setTimeout(resolve, ms)
     );
 }
 
-
 async function fetchJSON(
     url,
-    timeout=FETCH_TIMEOUT
+    timeout = FETCH_TIMEOUT
 ) {
-
     const old =
         cache.get(url);
 
     if (
         old &&
-        Date.now()-old.time <
+        Date.now() - old.time <
             CACHE_TIME
     ) {
         return old.data;
     }
 
-
     const controller =
         new AbortController();
-
 
     const timer =
         setTimeout(
@@ -56,9 +48,7 @@ async function fetchJSON(
             timeout
         );
 
-
     try {
-
         const res =
             await fetch(
                 url,
@@ -66,82 +56,66 @@ async function fetchJSON(
                     signal:
                         controller.signal,
 
-                    headers:{
+                    headers: {
                         Accept:
                             "application/json"
                     }
                 }
             );
 
-
         if (!res.ok)
             throw new Error(
                 `HTTP ${res.status}`
             );
 
-
         const data =
             await res.json();
-
 
         cache.set(
             url,
             {
-                time:Date.now(),
+                time: Date.now(),
                 data
             }
         );
 
-
         return data;
 
     } finally {
-
         clearTimeout(timer);
-
     }
-
 }
-
 
 function emptyCF(
-    status="error"
+    status = "error"
 ) {
-
     return {
-        current:0,
-        max:0,
-        history:[],
-        available:false,
+        current: 0,
+        max: 0,
+        history: [],
+        available: false,
         status
     };
-
 }
-
 
 function emptyCC(
-    status="error"
+    status = "error"
 ) {
-
     return {
-        current:0,
-        max:0,
-        stars:0,
-        history:[],
-        available:false,
+        current: 0,
+        max: 0,
+        stars: 0,
+        history: [],
+        available: false,
         status
     };
-
 }
 
-
 function normalizeCF(data) {
-
     const arr =
         Array.isArray(data?.result)
             ? data.result
             : [];
-
 
     const all =
         arr
@@ -189,22 +163,19 @@ function normalizeCF(data) {
                 })
             )
             .sort(
-                (a,b) =>
-                    a.time-b.time
+                (a, b) =>
+                    a.time - b.time
             );
-
 
     if (!all.length)
         return emptyCF(
             "unavailable"
         );
 
-
     return {
-
         current:
             all[
-                all.length-1
+                all.length - 1
             ].rating,
 
         max:
@@ -222,24 +193,19 @@ function normalizeCF(data) {
                     BASE_TIMESTAMP
             ),
 
-        available:true,
-        status:"ok"
-
+        available: true,
+        status: "ok"
     };
-
 }
-
 
 async function loadCF(
     member,
     remaining
 ) {
-
     if (!member.cf)
         return emptyCF(
             "unavailable"
         );
-
 
     const url =
         `${CF_API}/user.rating?handle=${
@@ -248,9 +214,7 @@ async function loadCF(
             )
         }`;
 
-
     try {
-
         const data =
             await fetchJSON(
                 url,
@@ -263,18 +227,15 @@ async function loadCF(
                 )
             );
 
-
         return normalizeCF(
             data
         );
 
     } catch (err) {
-
         console.warn(
             `CF failed for ${member.cf}:`,
             err
         );
-
 
         if (
             err?.name ===
@@ -285,27 +246,21 @@ async function loadCF(
             );
         }
 
-
         return emptyCF(
             "error"
         );
-
     }
-
 }
-
 
 function getPrivateCC(
     member
 ) {
-
     if (
         member.id !==
         "252002055"
     ) {
         return null;
     }
-
 
     return [
         "k",
@@ -315,18 +270,14 @@ function getPrivateCC(
         "e",
         "n"
     ].join("");
-
 }
-
 
 function normalizeStars(
     value,
     rating
 ) {
-
     const stars =
         Number(value);
-
 
     if (
         Number.isFinite(stars) &&
@@ -335,47 +286,27 @@ function normalizeStars(
         return stars;
     }
 
-
-    if (rating >= 2500)
-        return 7;
-
-    if (rating >= 2200)
-        return 6;
-
-    if (rating >= 2000)
-        return 5;
-
-    if (rating >= 1800)
-        return 4;
-
-    if (rating >= 1600)
-        return 3;
-
-    if (rating >= 1400)
-        return 2;
-
-    if (rating > 0)
-        return 1;
-
+    if (rating >= 2500) return 7;
+    if (rating >= 2200) return 6;
+    if (rating >= 2000) return 5;
+    if (rating >= 1800) return 4;
+    if (rating >= 1600) return 3;
+    if (rating >= 1400) return 2;
+    if (rating > 0) return 1;
 
     return 0;
-
 }
-
 
 function normalizeCC(
     data
 ) {
-
     const root =
         data?.data || {};
-
 
     const current =
         Number(
             root.rating
         ) || 0;
-
 
     const max =
         Number(
@@ -384,7 +315,6 @@ function normalizeCC(
             root.max_rating
         ) || current;
 
-
     const raw =
         Array.isArray(
             root.history
@@ -392,31 +322,25 @@ function normalizeCC(
             ? root.history
             : [];
 
-
     const history = [];
 
-
     for (
-        let i=0;
-        i<raw.length;
+        let i = 0;
+        i < raw.length;
         i++
     ) {
-
         const x =
             raw[i];
-
 
         const rating =
             Number(
                 x.rating
             );
 
-
         let time =
             Number(
                 x.timestamp
             );
-
 
         if (
             !Number.isFinite(time) &&
@@ -428,14 +352,12 @@ function normalizeCC(
                 );
         }
 
-
         if (
             Number.isFinite(time) &&
             time < 10000000000
         ) {
             time *= 1000;
         }
-
 
         if (
             !Number.isFinite(rating) ||
@@ -444,53 +366,41 @@ function normalizeCC(
             continue;
         }
 
-
         const previous =
             i > 0 &&
             Number.isFinite(
                 Number(
-                    raw[i-1].rating
+                    raw[i - 1].rating
                 )
             )
                 ? Number(
-                    raw[i-1].rating
+                    raw[i - 1].rating
                 )
                 : null;
 
-
         history.push({
-
             time,
-
             rating,
-
             oldRating:
                 previous,
-
             contestName:
                 x.name ||
                 "CodeChef Contest",
-
             contestId:
                 x.contestId ??
                 x.contest_id ??
                 null,
-
             rank:
                 x.ranking ??
                 x.rank ??
                 null
-
         });
-
     }
 
-
     history.sort(
-        (a,b) =>
-            a.time-b.time
+        (a, b) =>
+            a.time - b.time
     );
-
 
     const filtered =
         history.filter(
@@ -499,10 +409,8 @@ function normalizeCC(
                 BASE_TIMESTAMP
         );
 
-
     let realCurrent =
         current;
-
 
     if (
         !realCurrent &&
@@ -510,14 +418,12 @@ function normalizeCC(
     ) {
         realCurrent =
             history[
-                history.length-1
+                history.length - 1
             ].rating;
     }
 
-
     let realMax =
         max;
-
 
     if (
         !realMax &&
@@ -532,9 +438,7 @@ function normalizeCC(
             );
     }
 
-
     return {
-
         current:
             realCurrent,
 
@@ -559,16 +463,12 @@ function normalizeCC(
             filtered.length > 0
                 ? "ok"
                 : "unavailable"
-
     };
-
 }
-
 
 async function loadCC(
     member
 ) {
-
     if (
         member.showCC !== true
     ) {
@@ -577,19 +477,16 @@ async function loadCC(
         );
     }
 
-
     const handle =
         member.cc ||
         getPrivateCC(
             member
         );
 
-
     if (!handle)
         return emptyCC(
             "unavailable"
         );
-
 
     const url =
         `${CC_API}/${
@@ -598,26 +495,21 @@ async function loadCC(
             )
         }/contests`;
 
-
     try {
-
         const data =
             await fetchJSON(
                 url
             );
-
 
         return normalizeCC(
             data
         );
 
     } catch (err) {
-
         console.warn(
             "CC request failed:",
             err
         );
-
 
         return emptyCC(
             err?.name ===
@@ -625,41 +517,32 @@ async function loadCC(
                 ? "timeout"
                 : "error"
         );
-
     }
-
 }
-
 
 async function loadCFAll(
     members,
     data,
     onUpdate
 ) {
-
     const deadline =
         Date.now() +
         CF_TOTAL_TIMEOUT;
 
-
     for (
-        let i=0;
-        i<members.length;
+        let i = 0;
+        i < members.length;
         i++
     ) {
-
         const member =
             members[i];
 
-
         const remaining =
-            deadline-Date.now();
-
+            deadline - Date.now();
 
         if (
             remaining <= 0
         ) {
-
             data[
                 member.id
             ].cf =
@@ -667,18 +550,14 @@ async function loadCFAll(
                     "timeout"
                 );
 
-
             onUpdate?.({
-                type:"cf",
+                type: "cf",
                 member,
                 data
             });
 
-
             continue;
-
         }
-
 
         data[
             member.id
@@ -688,57 +567,44 @@ async function loadCFAll(
                 remaining
             );
 
-
         onUpdate?.({
-            type:"cf",
+            type: "cf",
             member,
             data
         });
 
-
         if (
             i <
-            members.length-1
+            members.length - 1
         ) {
-
             const left =
-                deadline-Date.now();
-
+                deadline - Date.now();
 
             if (left > 0) {
-
                 await sleep(
                     Math.min(
                         CF_DELAY,
                         left
                     )
                 );
-
             }
-
         }
-
     }
 
-
     onUpdate?.({
-        type:"cf-complete",
+        type: "cf-complete",
         data
     });
-
 }
-
 
 async function loadCCAll(
     members,
     data,
     onUpdate
 ) {
-
     await Promise.all(
         members.map(
             async member => {
-
                 data[
                     member.id
                 ].cc =
@@ -746,41 +612,32 @@ async function loadCCAll(
                         member
                     );
 
-
                 onUpdate?.({
-                    type:"cc",
+                    type: "cc",
                     member,
                     data
                 });
-
             }
         )
     );
 
-
     onUpdate?.({
-        type:"cc-complete",
+        type: "cc-complete",
         data
     });
-
 }
-
 
 export async function loadAllData(
     members,
     onUpdate
 ) {
-
     const data = {};
-
 
     members.forEach(
         member => {
-
             data[
                 member.id
             ] = {
-
                 cf:
                     emptyCF(
                         "building"
@@ -790,15 +647,11 @@ export async function loadAllData(
                     emptyCC(
                         "building"
                     )
-
             };
-
         }
     );
 
-
     await Promise.all([
-
         loadCFAll(
             members,
             data,
@@ -810,10 +663,20 @@ export async function loadAllData(
             data,
             onUpdate
         )
-
     ]);
 
-
     return data;
+}
 
+// Function added for CF Tracker / Vault submission stream lookup
+export async function loadCFStatus(handle) {
+    if (!handle) return [];
+    const url = `https://codeforces.com/api/user.status?handle=${encodeURIComponent(handle)}&count=200`;
+    try {
+        const data = await fetchJSON(url, 5000);
+        return data.result || [];
+    } catch (err) {
+        console.warn(`Status failed for ${handle}:`, err);
+        return [];
+    }
 }
