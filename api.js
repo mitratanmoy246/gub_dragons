@@ -1,679 +1,214 @@
-import {
-    BASE_TIMESTAMP
-} from "./team.js";
-
-const CF_API =
-    "https://codeforces.com/api";
-
-const CC_API =
-    "https://codechef-stats-api-two.vercel.app";
+const CF_API = "https://codeforces.com/api";
+const CC_API = "https://codechef-stats-api-two.vercel.app";
 
 const FETCH_TIMEOUT = 3000;
 const CF_TOTAL_TIMEOUT = 9000;
 const CF_DELAY = 900;
 const CACHE_TIME = 30 * 60 * 1000;
 
-const cache =
-    new Map();
+const cache = new Map();
 
 function sleep(ms) {
-    return new Promise(
-        resolve =>
-            setTimeout(resolve, ms)
-    );
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function fetchJSON(
-    url,
-    timeout = FETCH_TIMEOUT
-) {
-    const old =
-        cache.get(url);
-
-    if (
-        old &&
-        Date.now() - old.time <
-            CACHE_TIME
-    ) {
+async function fetchJSON(url, timeout = FETCH_TIMEOUT) {
+    const old = cache.get(url);
+    if (old && Date.now() - old.time < CACHE_TIME) {
         return old.data;
     }
 
-    const controller =
-        new AbortController();
-
-    const timer =
-        setTimeout(
-            () =>
-                controller.abort(),
-            timeout
-        );
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
 
     try {
-        const res =
-            await fetch(
-                url,
-                {
-                    signal:
-                        controller.signal,
+        const res = await fetch(url, {
+            signal: controller.signal,
+            headers: { Accept: "application/json" }
+        });
 
-                    headers: {
-                        Accept:
-                            "application/json"
-                    }
-                }
-            );
-
-        if (!res.ok)
-            throw new Error(
-                `HTTP ${res.status}`
-            );
-
-        const data =
-            await res.json();
-
-        cache.set(
-            url,
-            {
-                time: Date.now(),
-                data
-            }
-        );
-
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        
+        cache.set(url, { time: Date.now(), data });
         return data;
-
     } finally {
         clearTimeout(timer);
     }
 }
 
-function emptyCF(
-    status = "error"
-) {
-    return {
-        current: 0,
-        max: 0,
-        history: [],
-        available: false,
-        status
-    };
+function emptyCF(status = "error") {
+    return { current: 0, max: 0, history: [], available: false, status };
 }
 
-function emptyCC(
-    status = "error"
-) {
-    return {
-        current: 0,
-        max: 0,
-        stars: 0,
-        history: [],
-        available: false,
-        status
-    };
+function emptyCC(status = "error") {
+    return { current: 0, max: 0, stars: 0, history: [], available: false, status };
 }
 
 function normalizeCF(data) {
-    const arr =
-        Array.isArray(data?.result)
-            ? data.result
-            : [];
+    const arr = Array.isArray(data?.result) ? data.result : [];
+    const all = arr
+        .filter(x => Number.isFinite(Number(x.newRating)) && Number.isFinite(Number(x.ratingUpdateTimeSeconds)))
+        .map(x => ({
+            time: Number(x.ratingUpdateTimeSeconds) * 1000,
+            rating: Number(x.newRating),
+            oldRating: Number(x.oldRating),
+            contestName: x.contestName || "Unknown Contest",
+            contestId: x.contestId ?? null,
+            rank: x.rank ?? null
+        }))
+        .sort((a, b) => a.time - b.time);
 
-    const all =
-        arr
-            .filter(
-                x =>
-                    Number.isFinite(
-                        Number(
-                            x.newRating
-                        )
-                    ) &&
-                    Number.isFinite(
-                        Number(
-                            x.ratingUpdateTimeSeconds
-                        )
-                    )
-            )
-            .map(
-                x => ({
-                    time:
-                        Number(
-                            x.ratingUpdateTimeSeconds
-                        ) * 1000,
-
-                    rating:
-                        Number(
-                            x.newRating
-                        ),
-
-                    oldRating:
-                        Number(
-                            x.oldRating
-                        ),
-
-                    contestName:
-                        x.contestName ||
-                        "Unknown Contest",
-
-                    contestId:
-                        x.contestId ??
-                        null,
-
-                    rank:
-                        x.rank ??
-                        null
-                })
-            )
-            .sort(
-                (a, b) =>
-                    a.time - b.time
-            );
-
-    if (!all.length)
-        return emptyCF(
-            "unavailable"
-        );
+    if (!all.length) return emptyCF("unavailable");
 
     return {
-        current:
-            all[
-                all.length - 1
-            ].rating,
-
-        max:
-            Math.max(
-                ...all.map(
-                    x =>
-                        x.rating
-                )
-            ),
-
-        history:
-            all.filter(
-                x =>
-                    x.time >=
-                    BASE_TIMESTAMP
-            ),
-
+        current: all[all.length - 1].rating,
+        max: Math.max(...all.map(x => x.rating)),
+        history: all.filter(x => x.time >= BASE_TIMESTAMP),
         available: true,
         status: "ok"
     };
 }
 
-async function loadCF(
-    member,
-    remaining
-) {
-    if (!member.cf)
-        return emptyCF(
-            "unavailable"
-        );
-
-    const url =
-        `${CF_API}/user.rating?handle=${
-            encodeURIComponent(
-                member.cf
-            )
-        }`;
-
+async function loadCF(member, remaining) {
+    if (!member.publicCf) return emptyCF("unavailable");
+    const url = `${CF_API}/user.rating?handle=${encodeURIComponent(member.publicCf)}`;
     try {
-        const data =
-            await fetchJSON(
-                url,
-                Math.max(
-                    500,
-                    Math.min(
-                        FETCH_TIMEOUT,
-                        remaining
-                    )
-                )
-            );
-
-        return normalizeCF(
-            data
-        );
-
+        const data = await fetchJSON(url, Math.max(500, Math.min(FETCH_TIMEOUT, remaining)));
+        return normalizeCF(data);
     } catch (err) {
-        console.warn(
-            `CF failed for ${member.cf}:`,
-            err
-        );
-
-        if (
-            err?.name ===
-            "AbortError"
-        ) {
-            return emptyCF(
-                "timeout"
-            );
-        }
-
-        return emptyCF(
-            "error"
-        );
+        console.warn(`CF failed for ${member.publicCf}:`, err);
+        if (err?.name === "AbortError") return emptyCF("timeout");
+        return emptyCF("error");
     }
 }
 
-function getPrivateCC(
-    member
-) {
-    if (
-        member.id !==
-        "252002055"
-    ) {
-        return null;
-    }
-
-    return [
-        "k",
-        "r",
-        "y",
-        "v",
-        "e",
-        "n"
-    ].join("");
+function getPrivateCC(member) {
+    if (member.id !== "252002055") return null;
+    return ["k", "r", "y", "v", "e", "n"].join("");
 }
 
-function normalizeStars(
-    value,
-    rating
-) {
-    const stars =
-        Number(value);
-
-    if (
-        Number.isFinite(stars) &&
-        stars > 0
-    ) {
-        return stars;
-    }
-
-    if (rating >= 2500) return 7;
-    if (rating >= 2200) return 6;
-    if (rating >= 2000) return 5;
-    if (rating >= 1800) return 4;
-    if (rating >= 1600) return 3;
-    if (rating >= 1400) return 2;
-    if (rating > 0) return 1;
-
+function normalizeStars(value, rating) {
+    const stars = Number(value);
+    if (Number.isFinite(stars) && stars > 0) return stars;
+    if (rating >= 2500) return 7; if (rating >= 2200) return 6; if (rating >= 2000) return 5;
+    if (rating >= 1800) return 4; if (rating >= 1600) return 3; if (rating >= 1400) return 2; if (rating > 0) return 1;
     return 0;
 }
 
-function normalizeCC(
-    data
-) {
-    const root =
-        data?.data || {};
-
-    const current =
-        Number(
-            root.rating
-        ) || 0;
-
-    const max =
-        Number(
-            root.maxRating ??
-            root.highestRating ??
-            root.max_rating
-        ) || current;
-
-    const raw =
-        Array.isArray(
-            root.history
-        )
-            ? root.history
-            : [];
-
+function normalizeCC(data) {
+    const root = data?.data || {};
+    const current = Number(root.rating) || 0;
+    const max = Number(root.maxRating ?? root.highestRating ?? root.max_rating) || current;
+    const raw = Array.isArray(root.history) ? root.history : [];
     const history = [];
 
-    for (
-        let i = 0;
-        i < raw.length;
-        i++
-    ) {
-        const x =
-            raw[i];
+    for (let i = 0; i < raw.length; i++) {
+        const x = raw[i];
+        const rating = Number(x.rating);
+        let time = Number(x.timestamp);
 
-        const rating =
-            Number(
-                x.rating
-            );
+        if (!Number.isFinite(time) && x.date) time = Date.parse(x.date);
+        if (Number.isFinite(time) && time < 10000000000) time *= 1000;
+        if (!Number.isFinite(rating) || !Number.isFinite(time)) continue;
 
-        let time =
-            Number(
-                x.timestamp
-            );
-
-        if (
-            !Number.isFinite(time) &&
-            x.date
-        ) {
-            time =
-                Date.parse(
-                    x.date
-                );
-        }
-
-        if (
-            Number.isFinite(time) &&
-            time < 10000000000
-        ) {
-            time *= 1000;
-        }
-
-        if (
-            !Number.isFinite(rating) ||
-            !Number.isFinite(time)
-        ) {
-            continue;
-        }
-
-        const previous =
-            i > 0 &&
-            Number.isFinite(
-                Number(
-                    raw[i - 1].rating
-                )
-            )
-                ? Number(
-                    raw[i - 1].rating
-                )
-                : null;
+        const previous = i > 0 && Number.isFinite(Number(raw[i - 1].rating)) ? Number(raw[i - 1].rating) : null;
 
         history.push({
-            time,
-            rating,
-            oldRating:
-                previous,
-            contestName:
-                x.name ||
-                "CodeChef Contest",
-            contestId:
-                x.contestId ??
-                x.contest_id ??
-                null,
-            rank:
-                x.ranking ??
-                x.rank ??
-                null
+            time, rating, oldRating: previous,
+            contestName: x.name || "CodeChef Contest",
+            contestId: x.contestId ?? x.contest_id ?? null,
+            rank: x.ranking ?? x.rank ?? null
         });
     }
 
-    history.sort(
-        (a, b) =>
-            a.time - b.time
-    );
+    history.sort((a, b) => a.time - b.time);
+    const filtered = history.filter(x => x.time >= BASE_TIMESTAMP);
 
-    const filtered =
-        history.filter(
-            x =>
-                x.time >=
-                BASE_TIMESTAMP
-        );
+    let realCurrent = current;
+    if (!realCurrent && history.length) realCurrent = history[history.length - 1].rating;
 
-    let realCurrent =
-        current;
-
-    if (
-        !realCurrent &&
-        history.length
-    ) {
-        realCurrent =
-            history[
-                history.length - 1
-            ].rating;
-    }
-
-    let realMax =
-        max;
-
-    if (
-        !realMax &&
-        history.length
-    ) {
-        realMax =
-            Math.max(
-                ...history.map(
-                    x =>
-                        x.rating
-                )
-            );
-    }
+    let realMax = max;
+    if (!realMax && history.length) realMax = Math.max(...history.map(x => x.rating));
 
     return {
-        current:
-            realCurrent,
-
-        max:
-            realMax,
-
-        stars:
-            normalizeStars(
-                root.stars,
-                realCurrent
-            ),
-
-        history:
-            filtered,
-
-        available:
-            realCurrent > 0 ||
-            filtered.length > 0,
-
-        status:
-            realCurrent > 0 ||
-            filtered.length > 0
-                ? "ok"
-                : "unavailable"
+        current: realCurrent,
+        max: realMax,
+        stars: normalizeStars(root.stars, realCurrent),
+        history: filtered,
+        available: realCurrent > 0 || filtered.length > 0,
+        status: realCurrent > 0 || filtered.length > 0 ? "ok" : "unavailable"
     };
 }
 
-async function loadCC(
-    member
-) {
-    if (
-        member.showCC !== true
-    ) {
-        return emptyCC(
-            "hidden"
-        );
-    }
+async function loadCC(member) {
+    if (member.showCC !== true) return emptyCC("hidden");
+    const handle = member.cc || getPrivateCC(member);
+    if (!handle) return emptyCC("unavailable");
 
-    const handle =
-        member.cc ||
-        getPrivateCC(
-            member
-        );
-
-    if (!handle)
-        return emptyCC(
-            "unavailable"
-        );
-
-    const url =
-        `${CC_API}/${
-            encodeURIComponent(
-                handle
-            )
-        }/contests`;
-
+    const url = `${CC_API}/${encodeURIComponent(handle)}/contests`;
     try {
-        const data =
-            await fetchJSON(
-                url
-            );
-
-        return normalizeCC(
-            data
-        );
-
+        const data = await fetchJSON(url);
+        return normalizeCC(data);
     } catch (err) {
-        console.warn(
-            "CC request failed:",
-            err
-        );
-
-        return emptyCC(
-            err?.name ===
-            "AbortError"
-                ? "timeout"
-                : "error"
-        );
+        console.warn("CC request failed:", err);
+        return emptyCC(err?.name === "AbortError" ? "timeout" : "error");
     }
 }
 
-async function loadCFAll(
-    members,
-    data,
-    onUpdate
-) {
-    const deadline =
-        Date.now() +
-        CF_TOTAL_TIMEOUT;
+async function loadCFAll(members, data, onUpdate) {
+    const deadline = Date.now() + CF_TOTAL_TIMEOUT;
 
-    for (
-        let i = 0;
-        i < members.length;
-        i++
-    ) {
-        const member =
-            members[i];
+    for (let i = 0; i < members.length; i++) {
+        const member = members[i];
+        const remaining = deadline - Date.now();
 
-        const remaining =
-            deadline - Date.now();
-
-        if (
-            remaining <= 0
-        ) {
-            data[
-                member.id
-            ].cf =
-                emptyCF(
-                    "timeout"
-                );
-
-            onUpdate?.({
-                type: "cf",
-                member,
-                data
-            });
-
+        if (remaining <= 0) {
+            data[member.id].cf = emptyCF("timeout");
+            onUpdate?.({ type: "cf", member, data });
             continue;
         }
 
-        data[
-            member.id
-        ].cf =
-            await loadCF(
-                member,
-                remaining
-            );
+        data[member.id].cf = await loadCF(member, remaining);
+        onUpdate?.({ type: "cf", member, data });
 
-        onUpdate?.({
-            type: "cf",
-            member,
-            data
-        });
-
-        if (
-            i <
-            members.length - 1
-        ) {
-            const left =
-                deadline - Date.now();
-
-            if (left > 0) {
-                await sleep(
-                    Math.min(
-                        CF_DELAY,
-                        left
-                    )
-                );
-            }
+        if (i < members.length - 1) {
+            const left = deadline - Date.now();
+            if (left > 0) await sleep(Math.min(CF_DELAY, left));
         }
     }
-
-    onUpdate?.({
-        type: "cf-complete",
-        data
-    });
+    onUpdate?.({ type: "cf-complete", data });
 }
 
-async function loadCCAll(
-    members,
-    data,
-    onUpdate
-) {
+async function loadCCAll(members, data, onUpdate) {
     await Promise.all(
-        members.map(
-            async member => {
-                data[
-                    member.id
-                ].cc =
-                    await loadCC(
-                        member
-                    );
-
-                onUpdate?.({
-                    type: "cc",
-                    member,
-                    data
-                });
-            }
-        )
+        members.map(async member => {
+            data[member.id].cc = await loadCC(member);
+            onUpdate?.({ type: "cc", member, data });
+        })
     );
-
-    onUpdate?.({
-        type: "cc-complete",
-        data
-    });
+    onUpdate?.({ type: "cc-complete", data });
 }
 
-export async function loadAllData(
-    members,
-    onUpdate
-) {
+async function loadAllData(members, onUpdate) {
     const data = {};
-
-    members.forEach(
-        member => {
-            data[
-                member.id
-            ] = {
-                cf:
-                    emptyCF(
-                        "building"
-                    ),
-
-                cc:
-                    emptyCC(
-                        "building"
-                    )
-            };
-        }
-    );
+    members.forEach(member => {
+        data[member.id] = { cf: emptyCF("building"), cc: emptyCC("building") };
+    });
 
     await Promise.all([
-        loadCFAll(
-            members,
-            data,
-            onUpdate
-        ),
-
-        loadCCAll(
-            members,
-            data,
-            onUpdate
-        )
+        loadCFAll(members, data, onUpdate),
+        loadCCAll(members, data, onUpdate)
     ]);
 
     return data;
 }
 
-// Function added for CF Tracker / Vault submission stream lookup
-export async function loadCFStatus(handle) {
+async function loadCFStatus(handle) {
     if (!handle) return [];
-    const url = `https://codeforces.com/api/user.status?handle=${encodeURIComponent(handle)}&count=200`;
+    const url = `https://codeforces.com/api/user.status?handle=${encodeURIComponent(handle)}&count=3000`;
     try {
-        const data = await fetchJSON(url, 5000);
+        const data = await fetchJSON(url, 8000); 
         return data.result || [];
     } catch (err) {
         console.warn(`Status failed for ${handle}:`, err);

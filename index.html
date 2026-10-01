@@ -3,43 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>GUB_Dragons // Command Center v3.0</title>
-
+    <title>GUB_Dragons // Command Center v3.1</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
-
 <body>
 
 <div id="bootScreen" class="boot-screen">
     <div class="boot-box">
         <div class="boot-logo">GD</div>
-
-        <div class="boot-title">
-            GUB_Dragons
-        </div>
-
-        <div class="boot-subtitle">
-            COMPETITIVE INTELLIGENCE SYSTEM // v3.0
-        </div>
-
-        <div class="boot-progress">
-            <span id="bootProgress"></span>
-        </div>
-
-        <div id="bootText" class="boot-text">
-            INITIALIZING SYSTEM...
-        </div>
+        <div class="boot-title">GUB_Dragons</div>
+        <div class="boot-subtitle">COMPETITIVE INTELLIGENCE SYSTEM // v3.1</div>
+        <div class="boot-progress"><span id="bootProgress"></span></div>
+        <div id="bootText" class="boot-text">INITIALIZING SYSTEM...</div>
     </div>
 </div>
 
@@ -58,638 +37,240 @@
 <div class="hud-corner hud-br"></div>
 
 <div class="page">
-
     <header class="topbar">
-
         <div class="brand">
             <div class="brand-icon">GD</div>
-
             <div>
-                <div class="brand-title">
-                    GUB_Dragons
-                </div>
-
-                <div class="brand-subtitle">
-                    COMPETITIVE INTELLIGENCE SYSTEM
-                </div>
+                <div class="brand-title">GUB_Dragons</div>
+                <div class="brand-subtitle">COMPETITIVE INTELLIGENCE SYSTEM</div>
             </div>
         </div>
-
         <div class="system-state">
             <span class="state-light"></span>
-            <span id="systemState">
-                SYSTEM ONLINE
-            </span>
+            <span id="systemState">SYSTEM ONLINE</span>
         </div>
-
         <div class="top-meta">
-            <span id="liveClock">
-                00:00:00
-            </span>
-
-            <span>
-                UTC +06:00
-            </span>
+            <span id="liveClock">00:00:00</span>
+            <span>UTC +06:00</span>
         </div>
-
         <nav>
             <a href="#operators">ROSTER</a>
             <a href="#telemetry">TELEMETRY</a>
             <a href="#archive">ARCHIVE</a>
             <a href="#" id="vaultBtn" style="color:var(--red);">[VAULT]</a>
         </nav>
-
     </header>
 
-
     <section class="hero">
-
         <div class="hero-copy">
-
             <div class="eyebrow">
-                <span></span>
-                GREEN UNIVERSITY OF BANGLADESH
-                <b>GD // 03</b>
+                <span></span> GREEN UNIVERSITY OF BANGLADESH <b>GD // 03</b>
             </div>
-
-            <h1>
-                GUB<span>_DRAGONS</span>
-            </h1>
-
+            <h1>GUB<span>_DRAGONS</span></h1>
             <div class="hero-line">
-                <i></i>
-                COMPETITIVE PROGRAMMING DIVISION
-                <i></i>
+                <i></i> COMPETITIVE PROGRAMMING DIVISION <i></i>
             </div>
-
-            <p>
-                A competitive intelligence interface for monitoring
-                operator ratings, contest performance, ranking evolution
-                and competitive achievements.
-            </p>
-
+            <p>A competitive intelligence interface for monitoring operator ratings, contest performance, ranking evolution and competitive achievements.</p>
             <div class="hero-actions">
-
-                <a href="#operators" class="hud-button">
-                    ACCESS ROSTER
-                    <b>↗</b>
-                </a>
-
-                <a href="#telemetry" class="hud-button secondary">
-                    OPEN TELEMETRY
-                    <b>+</b>
-                </a>
-
+                <a href="#operators" class="hud-button">ACCESS ROSTER <b>↗</b></a>
+                <a href="#telemetry" class="hud-button secondary">OPEN TELEMETRY <b>+</b></a>
             </div>
-
             <div class="hero-stats">
-
-                <div>
-                    <span>OPERATORS</span>
-                    <strong id="heroOperators">03</strong>
-                </div>
-
-                <div>
-                    <span>PLATFORMS</span>
-                    <strong>02</strong>
-                </div>
-
-                <div>
-                    <span>BASELINE</span>
-                    <strong>09/25</strong>
-                </div>
-
-                <div>
-                    <span>STATUS</span>
-                    <strong class="green">ACTIVE</strong>
-                </div>
-
+                <div><span>OPERATORS</span><strong id="heroOperators">03</strong></div>
+                <div><span>PLATFORMS</span><strong>02</strong></div>
+                <div><span>BASELINE</span><strong>09/25</strong></div>
+                <div><span>STATUS</span><strong class="green">ACTIVE</strong></div>
             </div>
-
         </div>
 
-
         <div class="command-node">
-
-            <div class="node-header">
-                <span>COMMAND NODE</span>
-                <b>GD-NODE-03</b>
-            </div>
-
+            <div class="node-header"><span>COMMAND NODE</span><b>GD-NODE-03</b></div>
             <div class="node-body">
-
                 <div class="radar">
-
                     <div class="radar-ring r1"></div>
                     <div class="radar-ring r2"></div>
                     <div class="radar-ring r3"></div>
-
                     <div class="radar-cross horizontal"></div>
                     <div class="radar-cross vertical"></div>
-
                     <div class="radar-sweep"></div>
-
                     <span class="radar-dot d1"></span>
                     <span class="radar-dot d2"></span>
                     <span class="radar-dot d3"></span>
-
-                    <div class="radar-core">
-                        GD
-                    </div>
-
+                    <div class="radar-core">GD</div>
                 </div>
-
                 <div class="node-readout">
-
-                    <div>
-                        <span>NETWORK</span>
-                        <b>GUB_DRGN</b>
-                    </div>
-
-                    <div>
-                        <span>DATA STREAM</span>
-                        <b>CF / CC</b>
-                    </div>
-
-                    <div>
-                        <span>ARCHIVE</span>
-                        <b>ONLINE</b>
-                    </div>
-
-                    <div>
-                        <span>SECURITY</span>
-                        <b class="green">NOMINAL</b>
-                    </div>
-
+                    <div><span>NETWORK</span><b>GUB_DRGN</b></div>
+                    <div><span>DATA STREAM</span><b>CF / CC</b></div>
+                    <div><span>ARCHIVE</span><b>ONLINE</b></div>
+                    <div><span>SECURITY</span><b class="green">NOMINAL</b></div>
                 </div>
-
             </div>
-
             <div class="node-footer">
-
                 <span>SECURE CHANNEL</span>
-
                 <div class="signal-bars">
                     <i></i><i></i><i></i><i></i><i></i>
                     <i></i><i></i><i></i><i></i><i></i>
                 </div>
-
                 <span>0xGD</span>
-
             </div>
-
         </div>
-
     </section>
-
 
     <section class="telemetry-strip">
-
-        <div class="telemetry-cell">
-            <span>CODEFORCES API</span>
-            <strong id="cfSystemStatus">
-                <i></i> READY
-            </strong>
-        </div>
-
-        <div class="telemetry-cell">
-            <span>CODECHEF API</span>
-            <strong id="ccSystemStatus">
-                <i></i> READY
-            </strong>
-        </div>
-
-        <div class="telemetry-cell">
-            <span>DATA CACHE</span>
-            <strong>
-                <i></i> ACTIVE
-            </strong>
-        </div>
-
-        <div class="telemetry-cell">
-            <span>LAST SYNC</span>
-            <strong id="lastSync">
-                WAITING
-            </strong>
-        </div>
-
+        <div class="telemetry-cell"><span>CODEFORCES API</span><strong id="cfSystemStatus"><i></i> READY</strong></div>
+        <div class="telemetry-cell"><span>CODECHEF API</span><strong id="ccSystemStatus"><i></i> READY</strong></div>
+        <div class="telemetry-cell"><span>DATA CACHE</span><strong><i></i> ACTIVE</strong></div>
+        <div class="telemetry-cell"><span>LAST SYNC</span><strong id="lastSync">WAITING</strong></div>
     </section>
-
 
     <section class="metrics">
-
-        <div class="metric">
-            <span class="metric-id">01</span>
-
-            <div>
-                <small>ACTIVE OPERATORS</small>
-                <strong id="statOperators">03</strong>
-            </div>
-
-            <em>PERSONNEL</em>
-        </div>
-
-        <div class="metric">
-            <span class="metric-id">02</span>
-
-            <div>
-                <small>CORE OPERATORS</small>
-                <strong id="statCore">03</strong>
-            </div>
-
-            <em>CORE</em>
-        </div>
-
-        <div class="metric">
-            <span class="metric-id">03</span>
-
-            <div>
-                <small>PLATFORMS</small>
-                <strong>02</strong>
-            </div>
-
-            <em>CF / CC</em>
-        </div>
-
-        <div class="metric">
-            <span class="metric-id">04</span>
-
-            <div>
-                <small>ACHIEVEMENTS</small>
-                <strong id="achievementCount">02</strong>
-            </div>
-
-            <em>VERIFIED</em>
-        </div>
-
+        <div class="metric"><span class="metric-id">01</span><div><small>ACTIVE OPERATORS</small><strong id="statOperators">03</strong></div><em>PERSONNEL</em></div>
+        <div class="metric"><span class="metric-id">02</span><div><small>CORE OPERATORS</small><strong id="statCore">03</strong></div><em>CORE</em></div>
+        <div class="metric"><span class="metric-id">03</span><div><small>PLATFORMS</small><strong>02</strong></div><em>CF / CC</em></div>
+        <div class="metric"><span class="metric-id">04</span><div><small>ACHIEVEMENTS</small><strong id="achievementCount">02</strong></div><em>VERIFIED</em></div>
     </section>
-
 
     <section class="section" id="operators">
-
         <div class="section-heading">
-
-            <div>
-                <span>PERSONNEL // 01</span>
-                <h2>OPERATOR ROSTER</h2>
-            </div>
-
+            <div><span>PERSONNEL // 01</span><h2>OPERATOR ROSTER</h2></div>
             <p>ACTIVE COMPETITIVE UNITS</p>
-
         </div>
-
         <div id="teamGrid" class="operator-grid"></div>
-
     </section>
-
 
     <section class="section" id="telemetry">
-
         <div class="section-heading">
-
-            <div>
-                <span>ANALYTICS // 02</span>
-                <h2>RATING TELEMETRY</h2>
-            </div>
-
+            <div><span>ANALYTICS // 02</span><h2>RATING TELEMETRY</h2></div>
             <p>CONTEST-BY-CONTEST PERFORMANCE</p>
-
         </div>
-
-
         <article class="telemetry-panel">
-
             <div class="panel-head">
-
                 <div class="platform-title">
-
-                    <div class="platform-icon cf">
-                        CF
-                    </div>
-
-                    <div>
-                        <h3>CODEFORCES</h3>
-                        <span>RATING EVOLUTION</span>
-                    </div>
-
+                    <div class="platform-icon cf">CF</div>
+                    <div><h3>CODEFORCES</h3><span>RATING EVOLUTION</span></div>
                 </div>
-
-                <div class="panel-status" id="cfChartState">
-                    <i></i>
-                    LOADING
-                </div>
-
+                <div class="panel-status" id="cfChartState"><i></i>LOADING</div>
             </div>
-
-
             <div class="chart-info">
-
-                <div>
-                    <span>WINDOW</span>
-                    <b>SEP 2025 → PRESENT</b>
-                </div>
-
-                <div>
-                    <span>METRIC</span>
-                    <b>RATING</b>
-                </div>
-
-                <div>
-                    <span>HOVER</span>
-                    <b>CONTEST DELTA</b>
-                </div>
-
+                <div><span>WINDOW</span><b>SEP 2025 → PRESENT</b></div>
+                <div><span>METRIC</span><b>RATING</b></div>
+                <div><span>HOVER</span><b>CONTEST DELTA</b></div>
             </div>
-
-
-            <div class="chart-box">
-                <canvas id="cfChart"></canvas>
-            </div>
-
+            <div class="chart-box"><canvas id="cfChart"></canvas></div>
             <div id="cfLegend" class="chart-legend"></div>
-
         </article>
-
-
         <article class="telemetry-panel">
-
             <div class="panel-head">
-
                 <div class="platform-title">
-
-                    <div class="platform-icon cc">
-                        CC
-                    </div>
-
-                    <div>
-                        <h3>CODECHEF</h3>
-                        <span>RATING EVOLUTION</span>
-                    </div>
-
+                    <div class="platform-icon cc">CC</div>
+                    <div><h3>CODECHEF</h3><span>RATING EVOLUTION</span></div>
                 </div>
-
-                <div class="panel-status" id="ccChartState">
-                    <i></i>
-                    LOADING
-                </div>
-
+                <div class="panel-status" id="ccChartState"><i></i>LOADING</div>
             </div>
-
-
             <div class="chart-info">
-
-                <div>
-                    <span>WINDOW</span>
-                    <b>SEP 2025 → PRESENT</b>
-                </div>
-
-                <div>
-                    <span>METRIC</span>
-                    <b>RATING</b>
-                </div>
-
-                <div>
-                    <span>STATUS</span>
-                    <b>LIVE DATA</b>
-                </div>
-
+                <div><span>WINDOW</span><b>SEP 2025 → PRESENT</b></div>
+                <div><span>METRIC</span><b>RATING</b></div>
+                <div><span>STATUS</span><b>LIVE DATA</b></div>
             </div>
-
-
-            <div class="chart-box">
-                <canvas id="ccChart"></canvas>
-            </div>
-
+            <div class="chart-box"><canvas id="ccChart"></canvas></div>
             <div id="ccLegend" class="chart-legend"></div>
-
         </article>
-
     </section>
 
-
     <section class="section">
-
         <div class="section-heading">
-
-            <div>
-                <span>ANALYTICS // 03</span>
-                <h2>TEAM PERFORMANCE</h2>
-            </div>
-
+            <div><span>ANALYTICS // 03</span><h2>TEAM PERFORMANCE</h2></div>
             <p>COLLECTIVE RATING STATE</p>
-
         </div>
-
-
         <div class="analytics-grid">
-
             <article class="analytics-panel">
-
                 <div class="analytics-head">
-                    <div>
-                        <span>CODEFORCES</span>
-                        <h3>TEAM RATING STATE</h3>
-                    </div>
-
-                    <b id="teamCFCurrent">
-                        —
-                    </b>
+                    <div><span>CODEFORCES</span><h3>TEAM RATING STATE</h3></div>
+                    <b id="teamCFCurrent">—</b>
                 </div>
-
                 <div class="team-bars" id="teamCFBars"></div>
-
             </article>
-
-
             <article class="analytics-panel">
-
                 <div class="analytics-head">
-                    <div>
-                        <span>CODECHEF</span>
-                        <h3>STAR DISTRIBUTION</h3>
-                    </div>
-
-                    <b id="teamCCCurrent">
-                        —
-                    </b>
+                    <div><span>CODECHEF</span><h3>STAR DISTRIBUTION</h3></div>
+                    <b id="teamCCCurrent">—</b>
                 </div>
-
                 <div class="team-bars" id="teamCCBars"></div>
-
             </article>
-
         </div>
-
     </section>
 
-
     <section class="section">
-
         <div class="section-heading">
-
-            <div>
-                <span>ACTIVITY // 04</span>
-                <h2>RECENT CONTEST ACTIVITY</h2>
-            </div>
-
+            <div><span>ACTIVITY // 04</span><h2>RECENT CONTEST ACTIVITY</h2></div>
             <p>LATEST VERIFIED EVENTS</p>
-
         </div>
-
-
         <div class="activity-panel">
-
             <div class="activity-filter">
-
-                <button class="active" data-filter="all">
-                    ALL
-                </button>
-
-                <button data-filter="cf">
-                    CODEFORCES
-                </button>
-
-                <button data-filter="cc">
-                    CODECHEF
-                </button>
-
+                <button class="active" data-filter="all">ALL</button>
+                <button data-filter="cf">CODEFORCES</button>
+                <button data-filter="cc">CODECHEF</button>
             </div>
-
             <div id="activityList" class="activity-list"></div>
-
         </div>
-
     </section>
 
-
     <section class="section">
-
         <div class="section-heading">
-
-            <div>
-                <span>STATUS // 05</span>
-                <h2>LIVE SNAPSHOT</h2>
-            </div>
-
+            <div><span>STATUS // 05</span><h2>LIVE SNAPSHOT</h2></div>
             <p>CURRENT COMPETITIVE STATE</p>
-
         </div>
-
         <div id="snapshotGrid" class="snapshot-grid"></div>
-
     </section>
-
 
     <section class="section">
-
         <div class="section-heading">
-
-            <div>
-                <span>MILESTONES // 06</span>
-                <h2>TEAM MILESTONES</h2>
-            </div>
-
+            <div><span>MILESTONES // 06</span><h2>TEAM MILESTONES</h2></div>
             <p>LIVE SYSTEM TOTALS</p>
-
         </div>
-
         <div id="milestoneGrid" class="milestone-grid"></div>
-
     </section>
-
 
     <section class="section" id="archive">
-
         <div class="section-heading">
-
-            <div>
-                <span>ARCHIVE // 07</span>
-                <h2>COMPETITIVE RECORD</h2>
-            </div>
-
+            <div><span>ARCHIVE // 07</span><h2>COMPETITIVE RECORD</h2></div>
             <p>VERIFIED ACHIEVEMENTS</p>
-
         </div>
-
         <div class="archive-filter">
-
-            <button class="active" data-achievement-filter="all">
-                ALL
-            </button>
-
-            <button data-achievement-filter="champion">
-                CHAMPION
-            </button>
-
-            <button data-achievement-filter="runner">
-                RUNNER-UP
-            </button>
-
-            <button data-achievement-filter="top">
-                TOP PLACEMENT
-            </button>
-
+            <button class="active" data-achievement-filter="all">ALL</button>
+            <button data-achievement-filter="champion">CHAMPION</button>
+            <button data-achievement-filter="runner">RUNNER-UP</button>
+            <button data-achievement-filter="top">TOP PLACEMENT</button>
         </div>
-
         <div id="achievementGrid" class="achievement-grid"></div>
-
     </section>
-
 
     <section class="mission">
-
         <div>
-
             <span>DIRECTIVE // GD-∞</span>
-
-            <h2>
-                BUILD.
-                <b>COMPETE.</b>
-                ASCEND.
-            </h2>
-
+            <h2>BUILD.<b>COMPETE.</b>ASCEND.</h2>
         </div>
-
         <div class="mission-right">
-
             <div class="mission-line"></div>
-
-            <p>
-                GUB_Dragons exists to push competitive programming
-                beyond individual performance — through preparation,
-                contest discipline and continuous technical growth.
-            </p>
-
+            <p>GUB_Dragons exists to push competitive programming beyond individual performance — through preparation, contest discipline and continuous technical growth.</p>
             <div class="coordinates">
-                <span>23.8103° N</span>
-                <span>90.4125° E</span>
-                <span>GUB // BANGLADESH</span>
+                <span>23.8103° N</span><span>90.4125° E</span><span>GUB // BANGLADESH</span>
             </div>
-
         </div>
-
     </section>
 
-
     <footer>
-
-        <span>GUB_Dragons // v3.0</span>
-
-        <span>
-            COMPETITIVE INTELLIGENCE NETWORK
-        </span>
-
-        <span>
-            GD // 03
-        </span>
-
+        <span>GUB_Dragons // v3.1</span>
+        <span>COMPETITIVE INTELLIGENCE NETWORK</span>
+        <span>GD // 03</span>
     </footer>
-
 </div>
 
 <!-- SECURE VAULT OVERLAY MODAL -->
 <div id="vaultOverlay" class="vault-overlay hidden">
-    <div class="vault-modal" id="vaultLogin">
+    <!-- Auth Mode -->
+    <div class="vault-modal" id="vaultLogin" style="position:relative;">
+        <button id="vaultLoginClose" style="position:absolute; top:15px; right:15px; background:transparent; border:none; color:var(--dim); font-size:18px; cursor:pointer;">✕</button>
         <h3>RESTRICTED AREA</h3>
         <p>ENTER CLEARANCE CODE</p>
         <input type="password" id="vaultPin" placeholder="***">
@@ -697,31 +278,73 @@
         <div id="vaultError" class="vault-error"></div>
     </div>
     
+    <!-- App Mode -->
     <div class="vault-modal vault-wide hidden" id="vaultContent">
         <div class="vault-header">
-            <h3 style="margin:0;">CF TRACKER // INTERNAL</h3>
-            <button id="vaultClose">CLOSE</button>
+            <div>
+                <h3 style="color:#fff;">GD-CORE <span style="color:var(--red);">// INTERNAL</span></h3>
+                <span id="vaultOpName" style="color:var(--dim); font-size:10px; font-family:var(--mono);">OPERATOR: UNKNOWN</span>
+            </div>
+            <div>
+                <button id="vaultLogout" style="margin-right:10px; color:var(--red); border-color:var(--red);">LOGOUT</button>
+                <button id="vaultClose">✕ CLOSE</button>
+            </div>
         </div>
-        <div class="vault-table-wrap">
-            <table class="vault-table">
-                <thead>
-                    <tr>
-                        <th>PROBLEM</th>
-                        <th>NAME</th>
-                        <th>LATEST</th>
-                        <th>VERDICT</th>
-                        <th id="vaultTh0" style="text-align:center;"></th>
-                        <th id="vaultTh1" style="text-align:center;"></th>
-                        <th id="vaultTh2" style="text-align:center;"></th>
-                    </tr>
-                </thead>
-                <tbody id="vaultTbody"></tbody>
-            </table>
+        
+        <div class="vault-nav">
+            <button class="active" data-vtab="dashboard">DASHBOARD</button>
+            <button data-vtab="matrix">PROBLEM MATRIX</button>
+            <button data-vtab="analyzer">PRO MAX ANALYZER</button>
+            <button data-vtab="activity">ACTIVITY FEED</button>
+        </div>
+
+        <div class="vault-panel active" id="vPanel-dashboard">
+            <div class="vault-stats-grid" id="vaultStatsGrid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <div class="vault-panel" id="vPanel-matrix" style="padding:0;">
+            <div class="vault-table-wrap" style="height:100%;">
+                <table class="vault-table" id="vaultTableElement">
+                    <thead>
+                        <tr>
+                            <th>PROBLEM</th>
+                            <th>LATEST ATTEMPT</th>
+                            <th>VERDICT</th>
+                            <th id="vaultTh0" style="text-align:center;"></th>
+                            <th id="vaultTh1" style="text-align:center;"></th>
+                            <th id="vaultTh2" style="text-align:center;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="vaultTbody">
+                        <!-- JS injected -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="vault-panel" id="vPanel-analyzer" style="padding:20px;">
+            <div class="analyzer-subnav" id="analyzerSubnav">
+                <!-- Buttons injected via JS -->
+            </div>
+            <div id="analyzerBody" style="width:100%;">
+                <!-- Dynamic Analyzer Content Injected Here -->
+            </div>
+        </div>
+
+        <div class="vault-panel" id="vPanel-activity">
+            <div class="vault-timeline" id="vaultTimeline">
+                <!-- Injected via JS -->
+            </div>
         </div>
     </div>
 </div>
 
-<script type="module" src="main.js"></script>
+<script src="team.js"></script>
+<script src="api.js"></script>
+<script src="charts.js"></script>
+<script src="main.js"></script>
 
 </body>
 </html>
