@@ -770,7 +770,7 @@ function renderAnalyzerTab(mode, data) {
         const oneShotRate = u.solvedSet.size > 0 ? ((u.attemptsToAC["1"] || 0) / u.solvedSet.size * 100).toFixed(1) : "0.0";
         const isKryven = u.name === "Tanmoy Mitra";
         const memberRef = teamMembers.find(m => getShortName(m.name) === mode);
-        const cfId = isKryven ? 'INTERNAL DATASTREAM (KRYVEN)' : (memberRef.publicCf || memberRef.cf);
+        const cfId = isKryven ? 'YouDonnoWho' : (memberRef.publicCf || memberRef.cf);
 
         body.innerHTML = `
             <div class="analyzer-profile-header">
